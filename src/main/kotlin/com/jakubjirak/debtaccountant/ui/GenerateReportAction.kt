@@ -2,6 +2,7 @@ package com.jakubjirak.debtaccountant.ui
 
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
+import com.intellij.openapi.actionSystem.ActionUpdateThread
 import com.jakubjirak.debtaccountant.licensing.FreemiumGate
 import com.jakubjirak.debtaccountant.report.ReportGenerator
 import com.jakubjirak.debtaccountant.settings.DebtAccountantSettings
@@ -11,6 +12,8 @@ import java.awt.datatransfer.StringSelection
 import javax.swing.JOptionPane
 
 class GenerateReportAction : AnAction() {
+    override fun getActionUpdateThread(): ActionUpdateThread = ActionUpdateThread.BGT
+
     override fun actionPerformed(e: AnActionEvent) {
         val project = e.project ?: return
         val gate = FreemiumGate.getInstance()
