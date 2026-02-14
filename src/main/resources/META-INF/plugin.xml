@@ -55,7 +55,7 @@
         <projectService
                 serviceImplementation="com.jakubjirak.debtaccountant.tracker.WorkaroundTracker"/>
 
-        <postStartupActivity
+        <projectActivity
                 implementation="com.jakubjirak.debtaccountant.DebtAccountantStartupActivity"/>
 
         <notificationGroup
