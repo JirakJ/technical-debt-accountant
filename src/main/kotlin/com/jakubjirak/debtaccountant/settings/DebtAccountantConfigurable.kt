@@ -1,87 +1,72 @@
 package com.jakubjirak.debtaccountant.settings
 
-import com.intellij.openapi.options.Configurable
-import java.awt.FlowLayout
-import javax.swing.BorderFactory
-import javax.swing.BoxLayout
-import javax.swing.JCheckBox
-import javax.swing.JComboBox
-import javax.swing.JComponent
-import javax.swing.JLabel
-import javax.swing.JPanel
-import javax.swing.JTextField
+import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory
+import com.intellij.openapi.options.BoundConfigurable
+import com.intellij.ui.dsl.builder.*
 
-class DebtAccountantConfigurable : Configurable {
+class DebtAccountantConfigurable : BoundConfigurable("Technical Debt Accountant") {
 
-    private var panel: JPanel? = null
-    private var hourlyRateField: JTextField? = null
-    private var currencyCombo: JComboBox<String>? = null
-    private var inventoryPathField: JTextField? = null
-    private var gutterIconsCheckbox: JCheckBox? = null
+    private val settings get() = DebtAccountantSettings.getInstance()
 
-    override fun getDisplayName(): String = "Technical Debt Accountant"
-
-    override fun createComponent(): JComponent {
-        val settings = DebtAccountantSettings.getInstance()
-
-        panel = JPanel().apply {
-            layout = BoxLayout(this, BoxLayout.Y_AXIS)
-            border = BorderFactory.createEmptyBorder(10, 10, 10, 10)
+    override fun createPanel() = panel {
+        group("Valuation") {
+            row("Hourly rate:") {
+                textField()
+                    .bindText(
+                        { settings.hourlyRate.toString() },
+                        { settings.hourlyRate = it.toDoubleOrNull() ?: 80.0 }
+                    )
+                    .comment("Your hourly rate for calculating debt cost")
+            }
+            row("Currency:") {
+                comboBox(listOf("USD", "EUR", "GBP", "CZK"))
+                    .bindItem(
+                        { settings.currency },
+                        { settings.currency = it ?: "USD" }
+                    )
+            }
+            row("") {
+                comment("Used to calculate dollar value of tech debt")
+            }
         }
-
-        val ratePanel = JPanel(FlowLayout(FlowLayout.LEFT)).apply {
-            add(JLabel("Hourly Rate:"))
-            hourlyRateField = JTextField(settings.hourlyRate.toString(), 10)
-            add(hourlyRateField)
+        group("Storage") {
+            row("Inventory path:") {
+                textFieldWithBrowseButton(
+                    FileChooserDescriptorFactory.createSingleFolderDescriptor()
+                        .withTitle("Select Inventory Folder")
+                )
+                    .bindText(
+                        { settings.inventoryPath },
+                        { settings.inventoryPath = it }
+                    )
+                    .comment("Directory where tech debt inventory is stored")
+            }
+            row {
+                checkBox("Auto-detect debt items")
+                    .bindSelected(
+                        { settings.autoDetectEnabled },
+                        { settings.autoDetectEnabled = it }
+                    )
+                    .comment("Automatically scan for tech debt markers in the project")
+            }
         }
-
-        val currencyPanel = JPanel(FlowLayout(FlowLayout.LEFT)).apply {
-            add(JLabel("Currency:"))
-            currencyCombo = JComboBox(arrayOf("USD", "EUR", "GBP", "CZK"))
-            currencyCombo?.selectedItem = settings.currency
-            add(currencyCombo)
+        group("Display") {
+            row {
+                checkBox("Show gutter icons")
+                    .bindSelected(
+                        { settings.showGutterIcons },
+                        { settings.showGutterIcons = it }
+                    )
+                    .comment("Display icons in the editor gutter for debt items")
+            }
+            row("Max free items:") {
+                spinner(1..1000, 1)
+                    .bindIntValue(
+                        { settings.maxFreeItems },
+                        { settings.maxFreeItems = it }
+                    )
+                    .comment("Maximum number of items shown before requiring action")
+            }
         }
-
-        val pathPanel = JPanel(FlowLayout(FlowLayout.LEFT)).apply {
-            add(JLabel("Inventory Path:"))
-            inventoryPathField = JTextField(settings.inventoryPath, 20)
-            add(inventoryPathField)
-        }
-
-        val gutterPanel = JPanel(FlowLayout(FlowLayout.LEFT)).apply {
-            gutterIconsCheckbox = JCheckBox("Show gutter icons for debt items", settings.showGutterIcons)
-            add(gutterIconsCheckbox)
-        }
-
-        panel?.add(ratePanel)
-        panel?.add(currencyPanel)
-        panel?.add(pathPanel)
-        panel?.add(gutterPanel)
-
-        return panel!!
-    }
-
-    override fun isModified(): Boolean {
-        val settings = DebtAccountantSettings.getInstance()
-        return hourlyRateField?.text?.toDoubleOrNull() != settings.hourlyRate ||
-            currencyCombo?.selectedItem != settings.currency ||
-            inventoryPathField?.text != settings.inventoryPath ||
-            gutterIconsCheckbox?.isSelected != settings.showGutterIcons
-    }
-
-    override fun apply() {
-        val settings = DebtAccountantSettings.getInstance()
-        settings.hourlyRate = hourlyRateField?.text?.toDoubleOrNull() ?: 80.0
-        settings.currency = currencyCombo?.selectedItem as? String ?: "USD"
-        settings.inventoryPath = inventoryPathField?.text ?: ".tech-debt"
-        settings.showGutterIcons = gutterIconsCheckbox?.isSelected ?: true
-    }
-
-    override fun reset() {
-        val settings = DebtAccountantSettings.getInstance()
-        hourlyRateField?.text = settings.hourlyRate.toString()
-        currencyCombo?.selectedItem = settings.currency
-        inventoryPathField?.text = settings.inventoryPath
-        gutterIconsCheckbox?.isSelected = settings.showGutterIcons
     }
 }
