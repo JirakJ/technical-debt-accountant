@@ -5,27 +5,35 @@
     <vendor email="jakub@jirak.dev" url="https://github.com/jakubjirak">Jakub Jirák</vendor>
 
     <description><![CDATA[
-    <h2>Technical Debt Accountant</h2>
-    <p>Quantify technical debt in dollars. Track workaround costs, calculate ROI of refactoring,
-    and generate management-ready reports in business language.</p>
+<h2>Technical Debt Accountant</h2>
+<p>
+  Speak management's language. Technical Debt Accountant transforms abstract code quality issues into
+  <b>dollar amounts</b> — with ROI calculations, interest rate tracking, and burndown charts that make
+  the business case for refactoring impossible to ignore.
+</p>
 
-    <h3>Free Features</h3>
-    <ul>
-        <li><b>Debt Inventory</b> — catalog tech debt items with categories and priority (up to 50)</li>
-        <li><b>Time Tracker</b> — log workaround time spent on each item</li>
-        <li><b>Hotspot Detection</b> — find files with the most accumulated debt</li>
-        <li><b>Git Integration</b> — link debt to commits, track age via blame</li>
-    </ul>
+<h2>Key Features</h2>
+<ul>
+  <li><b>Debt Inventory</b> — Catalog tech debt items with categories, priority, and estimated cost</li>
+  <li><b>Dollar Valuation</b> — Assign monetary value to each debt item based on team cost rates</li>
+  <li><b>Interest Rate Tracking</b> — Model how debt compounds over time if not addressed</li>
+  <li><b>ROI Calculator</b> — Calculate return on investment for fixing specific debt items</li>
+  <li><b>Hotspot Detection</b> — Identify code areas with the highest debt concentration</li>
+  <li><b>Git Integration</b> — Link debt items to commits and track age via blame</li>
+</ul>
 
-    <h3>Pro Features ($8/month)</h3>
-    <ul>
-        <li><b>Dollar Valuation</b> — set hourly rate, see debt in currency</li>
-        <li><b>Interest Rate</b> — track how debt cost grows monthly</li>
-        <li><b>ROI Calculator</b> — prioritize refactoring by payback period</li>
-        <li><b>Burndown Chart</b> — visualize debt resolution over time</li>
-        <li><b>Management Reports</b> — export Markdown reports for stakeholders</li>
-    </ul>
-    ]]></description>
+<h2>Why Technical Debt Accountant?</h2>
+<p>
+  Engineering teams struggle to get refactoring prioritized because debt is invisible to stakeholders. This
+  plugin makes tech debt tangible — with the same financial language used to justify every other business investment.
+</p>
+
+<h2>Free vs Pro</h2>
+<ul>
+  <li><b>Free:</b> Debt inventory (up to 50 items), time tracking, hotspot detection, Git integration</li>
+  <li><b>Pro ($8/month):</b> Unlimited items, dollar valuation, interest rate modeling, ROI calculator, burndown charts, management reports (Markdown/PDF), and team dashboards</li>
+</ul>
+]]></description>
 
     <depends>com.intellij.modules.platform</depends>
     <depends optional="true" config-file="git-features.xml">Git4Idea</depends>
