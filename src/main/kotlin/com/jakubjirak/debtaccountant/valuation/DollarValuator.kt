@@ -69,7 +69,7 @@ class DollarValuator {
             "USD" -> Locale.US
             "EUR" -> Locale.GERMANY
             "GBP" -> Locale.UK
-            "CZK" -> Locale("cs", "CZ")
+            "CZK" -> Locale.forLanguageTag("cs-CZ")
             else -> Locale.US
         }
     }

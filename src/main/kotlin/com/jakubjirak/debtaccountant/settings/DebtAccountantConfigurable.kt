@@ -2,6 +2,7 @@ package com.jakubjirak.debtaccountant.settings
 
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory
 import com.intellij.openapi.options.BoundConfigurable
+import com.intellij.openapi.ui.TextFieldWithBrowseButton
 import com.intellij.ui.dsl.builder.*
 
 class DebtAccountantConfigurable : BoundConfigurable("Technical Debt Accountant") {
@@ -31,10 +32,10 @@ class DebtAccountantConfigurable : BoundConfigurable("Technical Debt Accountant"
         }
         group("Storage") {
             row("Inventory path:") {
-                textFieldWithBrowseButton(
-                    FileChooserDescriptorFactory.createSingleFolderDescriptor()
-                        .withTitle("Select Inventory Folder")
-                )
+                cell(TextFieldWithBrowseButton().apply {
+                    addBrowseFolderListener("Select Inventory Folder", null, null,
+                        FileChooserDescriptorFactory.createSingleFolderDescriptor())
+                })
                     .bindText(
                         { settings.inventoryPath },
                         { settings.inventoryPath = it }
