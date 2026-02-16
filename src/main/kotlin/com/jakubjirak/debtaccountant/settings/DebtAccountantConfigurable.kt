@@ -33,8 +33,10 @@ class DebtAccountantConfigurable : BoundConfigurable("Technical Debt Accountant"
         group("Storage") {
             row("Inventory path:") {
                 cell(TextFieldWithBrowseButton().apply {
-                    addBrowseFolderListener("Select Inventory Folder", null, null,
-                        FileChooserDescriptorFactory.createSingleFolderDescriptor())
+                    addBrowseFolderListener(
+                        com.intellij.openapi.ui.TextBrowseFolderListener(
+                            FileChooserDescriptorFactory.createSingleFolderDescriptor()
+                                .withTitle("Select Inventory Folder"), null))
                 })
                     .bindText(
                         { settings.inventoryPath },
