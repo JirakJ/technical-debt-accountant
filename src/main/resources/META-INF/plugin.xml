@@ -1,6 +1,5 @@
 <idea-plugin>
     <id>com.jakubjirak.debtaccountant</id>
-    <product-descriptor code="PDEBTACCOUNTANT" release-date="20260215" release-version="20262" optional="true"/>
     <name>Technical Debt Accountant</name>
     <vendor email="support@jakubjirak.com" url="https://github.com/jakubjirak">Jakub Jirák</vendor>
 
@@ -58,10 +57,10 @@
             <li><b>Hotspot Detection</b> - Identifies files with the highest debt concentration using weighted scoring</li>
             <li><b>Git Integration</b> - Links debt items to commits and tracks file authors via Git blame</li>
             <li><b>Gutter Icons</b> - Priority-colored markers in the editor gutter with debt tooltips</li>
-            <li><b>Dollar Valuation</b> - Converts workaround time to dollar costs using configurable hourly rates (Pro)</li>
-            <li><b>ROI Calculator</b> - Calculates breakeven months and prioritizes refactoring by return on investment (Pro)</li>
-            <li><b>Burndown Charts</b> - Tracks debt resolution trends over time with improving, stable, or worsening indicators (Pro)</li>
-            <li><b>Management Reports</b> - Generates executive-ready Markdown reports with summaries, hotspots, and ROI opportunities (Pro)</li>
+            <li><b>Dollar Valuation</b> - Converts workaround time to dollar costs using configurable hourly rates</li>
+            <li><b>ROI Calculator</b> - Calculates breakeven months and prioritizes refactoring by return on investment</li>
+            <li><b>Burndown Charts</b> - Tracks debt resolution trends over time with improving, stable, or worsening indicators</li>
+            <li><b>Management Reports</b> - Generates executive-ready Markdown reports with summaries, hotspots, and ROI opportunities</li>
         </ul>
     ]]></change-notes>
 
@@ -84,9 +83,6 @@
 
         <applicationService
                 serviceImplementation="com.jakubjirak.debtaccountant.settings.DebtAccountantSettings"/>
-
-        <applicationService
-                serviceImplementation="com.jakubjirak.debtaccountant.licensing.FreemiumGate"/>
 
         <projectService
                 serviceImplementation="com.jakubjirak.debtaccountant.store.DebtInventoryStore"/>

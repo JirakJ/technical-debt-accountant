@@ -41,14 +41,13 @@
 - Project-level persistence in `.tech-debt/inventory.json`
 - Settings panel (Tools → Technical Debt Accountant) for hourly rate, currency, inventory path, and gutter icons
 - Startup activity to load inventory on project open
-- **Pro:** Dollar valuation of workaround time (configurable hourly rate and currency)
-- **Pro:** Monthly interest calculation over 30-day rolling windows
-- **Pro:** ROI calculator with breakeven month estimation
-- **Pro:** Burndown chart with trend detection (IMPROVING / STABLE / WORSENING)
-- **Pro:** Management report generation (Markdown) with executive summary, hotspots, and ROI opportunities
-- **Pro:** CSV export for burndown data
-- **Pro:** Unlimited debt items (Free tier: 50 items)
-- **Enterprise:** Team aggregation across members and projects
-- **Enterprise:** JIRA integration for linking debt items to tickets
-- **Enterprise:** Organizational trend analytics
-- Freemium licensing gate with Free, Pro ($8/month), and Enterprise ($15/dev/month) tiers
+- Dollar valuation of workaround time (configurable hourly rate and currency)
+- Monthly interest calculation over 30-day rolling windows
+- ROI calculator with breakeven month estimation
+- Burndown chart with trend detection (IMPROVING / STABLE / WORSENING)
+- Management report generation (Markdown) with executive summary, hotspots, and ROI opportunities
+- CSV export for burndown data
+- Unlimited debt items
+- Team aggregation across members and projects
+- JIRA integration for linking debt items to tickets
+- Organizational trend analytics

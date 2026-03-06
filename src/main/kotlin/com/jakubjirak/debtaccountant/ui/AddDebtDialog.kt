@@ -2,7 +2,6 @@ package com.jakubjirak.debtaccountant.ui
 
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.DialogWrapper
-import com.jakubjirak.debtaccountant.licensing.FreemiumGate
 import com.jakubjirak.debtaccountant.model.DebtCategory
 import com.jakubjirak.debtaccountant.model.DebtPriority
 import com.jakubjirak.debtaccountant.model.TechDebtItem
@@ -70,17 +69,6 @@ class AddDebtDialog(
     }
 
     override fun doOKAction() {
-        val gate = FreemiumGate.getInstance()
-        if (!gate.canAddItem(store.getItemCount())) {
-            JOptionPane.showMessageDialog(
-                contentPanel,
-                "Free tier limit reached (${FreemiumGate.MAX_FREE_ITEMS} items). Upgrade to Pro for unlimited.",
-                "Free Tier Limit",
-                JOptionPane.WARNING_MESSAGE
-            )
-            return
-        }
-
         val item = TechDebtItem(
             filePath = fileField.text,
             lineStart = lineStartField.text.toIntOrNull() ?: 0,
