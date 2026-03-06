@@ -8,8 +8,7 @@
 
 ## ✨ Features
 
-### Free Tier
-- **Debt inventory** — catalog up to 50 tech debt items with category, priority, description, and estimated fix time
+- **Debt inventory** — catalog tech debt items with category, priority, description, and estimated fix time
 - **Add debt at cursor** — press **Alt+D** to log a debt item at the current file and line
 - **9 debt categories** — Code Smell, Missing Tests, Outdated Dependency, Security Vulnerability, Performance Issue, Documentation Gap, Architecture Violation, Hardcoded Value, Copy-Paste Code
 - **4 priority levels** — Critical (4×), High (3×), Medium (2×), Low (1×) with weight multipliers
@@ -19,17 +18,12 @@
 - **Gutter icons** — priority-colored markers in the editor with debt tooltips
 - **Tech Debt tool window** — table view with active count, category, priority, and workaround minutes
 - **Project-level persistence** — data stored in `.tech-debt/inventory.json` (Git-trackable)
-
-### Pro Tier ($8/month)
-- **Unlimited debt items** — no 50-item cap
 - **Dollar valuation** — converts workaround time to cost using configurable hourly rate
 - **Monthly interest calculation** — tracks recurring workaround costs over 30-day windows
 - **ROI calculator** — calculates breakeven months (fix cost ÷ monthly interest) and prioritizes by ROI
 - **Burndown chart** — tracks debt resolution trends (IMPROVING / STABLE / WORSENING)
 - **Management export** — generates Markdown reports with executive summary, hotspots, and ROI opportunities
 - **CSV export** — export burndown data for external analysis
-
-### Enterprise Tier ($15/dev/month)
 - **Team aggregation** — aggregate debt metrics across team members and projects
 - **JIRA integration** — link debt items to JIRA tickets
 - **Trend analytics** — long-term debt trend analysis across the organization
@@ -54,7 +48,7 @@
 4. Fill in the category, priority, description, and estimated fix time
 5. Open the **Tech Debt** tool window (bottom panel) to view your inventory
 6. Use **Tools** → **Log Workaround Time** to track time spent on workarounds
-7. *(Pro)* Use **Tools** → **Generate Debt Report** to create an executive summary
+7. Use **Tools** → **Generate Debt Report** to create an executive summary
 
 ## ⚙️ Configuration
 
@@ -62,7 +56,7 @@ Open **Settings** → **Tools** → **Technical Debt Accountant** to configure:
 
 | Setting | Default | Description |
 |---------|---------|-------------|
-| Hourly Rate | `80.0` | Developer hourly rate for dollar valuation (Pro) |
+| Hourly Rate | `80.0` | Developer hourly rate for dollar valuation |
 | Currency | `USD` | Currency for cost display (USD, EUR, GBP, CZK) |
 | Inventory Path | `.tech-debt` | Directory for debt inventory storage (relative to project root) |
 | Show Gutter Icons | `true` | Display priority-colored icons in the editor gutter |
@@ -91,7 +85,7 @@ Use **Tools** → **Log Workaround Time** to record time spent working around de
 
 Alternatively, use the timer mode: `WorkaroundTracker.startTimer()` → `stopTimer()` to track time automatically.
 
-### Generating Reports *(Pro)*
+### Generating Reports
 
 Use **Tools** → **Generate Debt Report** to create a Markdown report containing:
 
@@ -113,7 +107,7 @@ score = (priority.weight × 10) + (workaroundMinutes × 0.5)
 
 Only active (unresolved) items are counted. View the top 10 hotspots in the Tech Debt tool window.
 
-### Dollar Valuation *(Pro)*
+### Dollar Valuation
 
 Each debt item's cost is calculated from tracked workaround time:
 

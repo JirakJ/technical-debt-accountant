@@ -6,7 +6,6 @@ import com.intellij.openapi.wm.ToolWindow
 import com.intellij.openapi.wm.ToolWindowFactory
 import com.intellij.ui.components.JBScrollPane
 import com.intellij.ui.content.ContentFactory
-import com.jakubjirak.debtaccountant.licensing.FreemiumGate
 import com.jakubjirak.debtaccountant.report.ReportGenerator
 import com.jakubjirak.debtaccountant.settings.DebtAccountantSettings
 import com.jakubjirak.debtaccountant.store.DebtInventoryStore
@@ -57,17 +56,11 @@ class DebtToolWindowFactory : ToolWindowFactory, DumbAware {
 
     private fun updateSummaryLabel(store: DebtInventoryStore, label: JLabel) {
         val activeCount = store.getActiveItemCount()
-        val gate = FreemiumGate.getInstance()
         val valuator = DollarValuator()
-
-        if (gate.isPaidFeatureAvailable(FreemiumGate.FEATURE_DOLLAR_VALUATION)) {
-            val totalCost = valuator.totalWorkaroundCost(store.getActiveItems())
-            val settings = DebtAccountantSettings.getInstance()
-            label.text = "Active Items: $activeCount  |  " +
-                "Total Workaround Cost: ${valuator.formatCurrency(totalCost, settings.currency)}"
-        } else {
-            label.text = "Active Items: $activeCount  |  Total Workaround Cost: [Pro feature]"
-        }
+        val totalCost = valuator.totalWorkaroundCost(store.getActiveItems())
+        val settings = DebtAccountantSettings.getInstance()
+        label.text = "Active Items: $activeCount  |  " +
+            "Total Workaround Cost: ${valuator.formatCurrency(totalCost, settings.currency)}"
     }
 
     private fun populateTable(store: DebtInventoryStore, tableModel: DefaultTableModel) {
@@ -113,21 +106,14 @@ class DebtToolWindowFactory : ToolWindowFactory, DumbAware {
 
         val reportButton = JButton("Generate Report")
         reportButton.addActionListener {
-            val gate = FreemiumGate.getInstance()
-            if (gate.isPaidFeatureAvailable(FreemiumGate.FEATURE_EXPORT)) {
-                val settings = DebtAccountantSettings.getInstance()
-                val generator = ReportGenerator()
-                val report = generator.generateReport(project.name, store.getItems(), settings.currency)
-                val markdown = generator.toMarkdown(report)
-                Toolkit.getDefaultToolkit().systemClipboard.setContents(StringSelection(markdown), null)
-                JOptionPane.showMessageDialog(
-                    null, "Report copied to clipboard!", "Report", JOptionPane.INFORMATION_MESSAGE
-                )
-            } else {
-                JOptionPane.showMessageDialog(
-                    null, "Report export is a Pro feature.", "Pro Feature", JOptionPane.INFORMATION_MESSAGE
-                )
-            }
+            val settings = DebtAccountantSettings.getInstance()
+            val generator = ReportGenerator()
+            val report = generator.generateReport(project.name, store.getItems(), settings.currency)
+            val markdown = generator.toMarkdown(report)
+            Toolkit.getDefaultToolkit().systemClipboard.setContents(StringSelection(markdown), null)
+            JOptionPane.showMessageDialog(
+                null, "Report copied to clipboard!", "Report", JOptionPane.INFORMATION_MESSAGE
+            )
         }
 
         panel.add(addButton)

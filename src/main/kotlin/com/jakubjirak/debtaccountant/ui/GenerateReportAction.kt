@@ -3,7 +3,6 @@ package com.jakubjirak.debtaccountant.ui
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.ActionUpdateThread
-import com.jakubjirak.debtaccountant.licensing.FreemiumGate
 import com.jakubjirak.debtaccountant.report.ReportGenerator
 import com.jakubjirak.debtaccountant.settings.DebtAccountantSettings
 import com.jakubjirak.debtaccountant.store.DebtInventoryStore
@@ -16,14 +15,6 @@ class GenerateReportAction : AnAction() {
 
     override fun actionPerformed(e: AnActionEvent) {
         val project = e.project ?: return
-        val gate = FreemiumGate.getInstance()
-
-        if (!gate.isPaidFeatureAvailable(FreemiumGate.FEATURE_EXPORT)) {
-            JOptionPane.showMessageDialog(
-                null, "Report export is a Pro feature.", "Pro Feature", JOptionPane.INFORMATION_MESSAGE
-            )
-            return
-        }
 
         val store = DebtInventoryStore.getInstance(project)
         val settings = DebtAccountantSettings.getInstance()
