@@ -136,5 +136,21 @@
                 icon="AllIcons.Actions.ListChanges">
             <add-to-group group-id="ToolsMenu" anchor="last"/>
         </action>
+
+        <action id="TechnicalDebt.EvaluateSla"
+                class="com.jakubjirak.debtaccountant.sla.EvaluateSlaAction"
+                text="Evaluate Debt SLAs…"
+                description="Evaluate the debt inventory against the project SLA policy and flag breaches."
+                icon="AllIcons.General.BalloonWarning">
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+        </action>
+
+        <action id="TechnicalDebt.EditSlaPolicy"
+                class="com.jakubjirak.debtaccountant.sla.EditSlaPolicyAction"
+                text="Edit Debt SLA Policy"
+                description="Open the .debt-sla.json policy file for editing (created from defaults if missing)."
+                icon="AllIcons.General.Settings">
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+        </action>
     </actions>
 </idea-plugin>
