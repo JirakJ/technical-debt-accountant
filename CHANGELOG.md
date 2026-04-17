@@ -1,5 +1,26 @@
 # Changelog
 
+## [2026.3.7] - 2026-04-17
+
+### Added
+- **Debt SLA Policy Engine** — define per-priority SLAs (HIGH = 30d, MEDIUM = 90d, LOW = 365d by
+  default) and evaluate the inventory against them. Items are classified as OK / APPROACHING /
+  BREACHED, breached HIGH items are auto-escalated to CRITICAL when the policy enables it, and a
+  traffic-light Markdown digest is produced for weekly leadership reporting.
+- Pure-Kotlin `SlaPolicy`, `SlaPolicyStore`, `SlaEvaluator`, `SlaEscalator`, `SlaMarkdownReporter`,
+  and `SlaCli` — all with injected `Instant` clock for deterministic tests. Policy is persisted at
+  `<projectRoot>/.debt-sla.json` with atomic-write semantics.
+- New `Tools → Evaluate Debt SLAs…` action with a three-tab results dialog (Breached / Approaching /
+  Escalations), Copy Markdown / Export .md / Open Policy Config buttons, and optional
+  apply-escalations checkbox.
+- New `Tools → Edit Debt SLA Policy` action that opens `.debt-sla.json` in the editor (creates it
+  from defaults if missing).
+- CLI entry point `com.jakubjirak.debtaccountant.sla.SlaCli` for CI pipelines with
+  `--inventory`, `--policy`, `--output=md|json`, and `--fail-on-breach` flags (exits 2 on breach).
+- Deterministic SHA-256 policy version hash included in every evaluation summary.
+- 50 new unit tests covering validation, store round-trip, evaluator boundaries, markdown rendering,
+  and CLI argument parsing.
+
 ## [2026.3.6] - 2026-04-17
 
 ### Added

@@ -49,6 +49,46 @@ item count, declined count). **Copy Markdown** and **Export .md** produce a Jira
 document with a summary table, selected items table, and a collapsed *Declined items* section
 (each declined item carries a reason: `BUDGET`, `FILTERED`, or `NO_EFFORT`).
 
+## 🚦 Debt SLA Policy Engine
+
+Turn the passive debt inventory into a policy-governed backlog. Define SLAs per priority; the
+engine flags items at risk / breached, auto-escalates breached items where configured, and produces
+a weekly-digest Markdown with a 🟢/🟡/🔴 banner.
+
+- `Tools → Evaluate Debt SLAs…` — runs in the background, shows breached / approaching /
+  escalation tabs, and can apply priority escalations in one click.
+- `Tools → Edit Debt SLA Policy` — opens `.debt-sla.json` (created from defaults if missing).
+
+Default policy (editable as JSON):
+
+```json
+{
+  "rules": [
+    { "priority": "CRITICAL", "maxAgeDays": 7,   "warnAtPercent": 80 },
+    { "priority": "HIGH",     "maxAgeDays": 30,  "warnAtPercent": 80,
+      "escalateOnBreach": true, "escalatedPriority": "CRITICAL" },
+    { "priority": "MEDIUM",   "maxAgeDays": 90,  "warnAtPercent": 80 },
+    { "priority": "LOW",      "maxAgeDays": 365, "warnAtPercent": 90 }
+  ],
+  "defaultRule": { "priority": "LOW", "maxAgeDays": 365, "warnAtPercent": 90 }
+}
+```
+
+### CI usage
+
+The `SlaCli` entry point exits `2` on breach, which lets you fail a build on SLA violations:
+
+```bash
+java -cp technical-debt-accountant.jar \
+  com.jakubjirak.debtaccountant.sla.SlaCli \
+  --inventory=.tech-debt/inventory.json \
+  --policy=.debt-sla.json \
+  --output=md \
+  --fail-on-breach > sla-report.md
+```
+
+Exit codes: `0` OK, `1` bad arguments / invalid policy, `2` breaches ≥ 1 when `--fail-on-breach`.
+
 ## 📦 Installation
 
 ### From JetBrains Marketplace
