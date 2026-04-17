@@ -1,5 +1,19 @@
 # Changelog
 
+## [2026.3.10] - 2026-04-17
+
+### Fixed
+- Replaced deprecated `FileSaverDescriptor(String, String, String...)` varargs
+  constructor with the new `(String, String)` + `withExtensionFilter(...)`
+  fluent builder in `EvaluateSlaAction`, `GenerateForecastAction`,
+  `GenerateWeeklyDigestAction`, and `SuggestSprintItemsAction`.
+- Replaced deprecated `TextFieldWithBrowseButton.addBrowseFolderListener(title,
+  description, project, descriptor)` overload with the new
+  `descriptor.withTitle(...).withDescription(...)` + `addBrowseFolderListener(
+  project, descriptor)` API.
+- Updated plugin verifier matrix to target `2024.3`, `2025.1.7`, `2025.2.6.1`,
+  `2025.3.4`, and `2026.1` (EAP), matching JetBrains Marketplace verification.
+
 ## [2026.3.9] - 2026-04-17
 
 ### Added

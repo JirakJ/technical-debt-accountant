@@ -215,7 +215,8 @@ internal class SprintPlanResultDialog(
     }
 
     private fun exportMarkdown() {
-        val descriptor = FileSaverDescriptor("Export Sprint Plan", "Save the plan as a Markdown file.", "md")
+        val descriptor = FileSaverDescriptor("Export Sprint Plan", "Save the plan as a Markdown file.")
+            .apply { withExtensionFilter("md") }
         val saver = FileChooserFactory.getInstance().createSaveFileDialog(descriptor, project)
         val target = saver.save(project.basePath?.let { com.intellij.openapi.vfs.LocalFileSystem.getInstance().findFileByPath(it) }, "sprint-plan.md")
         if (target != null) {
