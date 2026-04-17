@@ -1,5 +1,27 @@
 # Changelog
 
+## [2026.4.1] - 2026-04-17
+
+### Changed
+- Raised minimum compatibility to IntelliJ 2025.1 (build 251). Dropped
+  support for 2024.3 (build 243) so the plugin can use the modern, non-
+  deprecated platform APIs introduced in 2025.1.
+
+### Fixed
+- Replaced deprecated `FileSaverDescriptor(String, String, String...)` varargs
+  constructor with the non-deprecated `(String, String, String)` constructor
+  (single-extension filter) in `EvaluateSlaAction`, `GenerateForecastAction`,
+  `GenerateWeeklyDigestAction`, and `SuggestSprintItemsAction`.
+- Replaced deprecated / scheduled-for-removal
+  `TextBrowseFolderListener(FileChooserDescriptor, Project?)` constructor in
+  `DebtAccountantConfigurable` with the modern
+  `TextFieldWithBrowseButton.addBrowseFolderListener(Project?, FileChooserDescriptor)`
+  API.
+- Replaced deprecated `LocalFileSystem.refreshAndFindFileByIoFile(File)` with
+  `refreshAndFindFileByNioFile(Path)` in `GenerateForecastAction`.
+- Updated plugin verifier matrix to target `2025.1.7`, `2025.2.6.1`,
+  `2025.3.4`, and `2026.1`, matching JetBrains Marketplace verification.
+
 ## [2026.3.10] - 2026-04-17
 
 ### Fixed

@@ -163,8 +163,9 @@ class GenerateForecastAction : AnAction() {
             val ext = if (format == "html") "html" else "md"
             val descriptor = FileSaverDescriptor(
                 "Save Debt Forecast",
-                "Choose destination"
-            ).apply { withExtensionFilter(ext) }
+                "Choose destination",
+                ext
+            )
             val saver = FileChooserFactory.getInstance().createSaveFileDialog(descriptor, project)
             val baseDir = project.basePath?.let { LocalFileSystem.getInstance().findFileByPath(it) }
             val target = saver.save(baseDir, "debt-forecast.$ext")
@@ -173,7 +174,7 @@ class GenerateForecastAction : AnAction() {
                     val f = target.file
                     f.parentFile?.mkdirs()
                     f.writeText(body)
-                    LocalFileSystem.getInstance().refreshAndFindFileByIoFile(f)
+                    LocalFileSystem.getInstance().refreshAndFindFileByNioFile(f.toPath())
                     Messages.showInfoMessage(project, "Saved to ${f.absolutePath}", "Debt Forecast")
                     super.doOKAction()
                 } catch (t: Throwable) {
