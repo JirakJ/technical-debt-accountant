@@ -152,6 +152,14 @@
             <add-to-group group-id="ToolsMenu" anchor="last"/>
         </action>
 
+        <action id="TechnicalDebt.GenerateForecast"
+                class="com.jakubjirak.debtaccountant.forecast.GenerateForecastAction"
+                text="Debt Trend Forecast…"
+                description="Project debt count, dollars and burndown from digest snapshot history."
+                icon="AllIcons.Actions.ShowAsTree">
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+        </action>
+
         <action id="TechnicalDebt.EditSlaPolicy"
                 class="com.jakubjirak.debtaccountant.sla.EditSlaPolicyAction"
                 text="Edit Debt SLA Policy"
