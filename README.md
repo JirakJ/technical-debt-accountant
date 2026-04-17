@@ -132,6 +132,82 @@ java -cp technical-debt-accountant.jar \
 
 Exit codes: `0` OK, `1` argument or I/O error.
 
+## 📈 Debt Trend Forecasting
+
+Project where the backlog is heading before the next retro.
+
+**Tools → Debt Trend Forecast…** (or the `DebtForecastCli` command-line entry point)
+reads the JSON snapshots produced by the Weekly Digest feature and fits both a
+linear and an exponential model to the chronological series, then projects the
+next *N* weeks with a 95% confidence band.
+
+The forecast answers three executive-level questions:
+
+1. **Is the team paying debt down or adding more?** — reported as
+   `IMPROVING` / `FLAT` / `DEGRADING` based on slope.
+2. **When does the backlog reach zero?** — a concrete date, or `never`
+   if the slope is flat or positive.
+3. **What will the backlog look like in 12 weeks?** — a per-week table of
+   predicted count, predicted dollars, and a 95% CI (`±1.96 × residual std. error`).
+
+### Methodology
+
+- **Linear model:** Ordinary Least Squares fit `count = slope × week + intercept`.
+- **Exponential model:** log-linear fit `count = a × exp(b × week)` — points
+  with non-positive `y` are dropped before the log transform.
+- **AUTO:** fits both and picks the higher r² (linear wins ties).
+- **Confidence interval:** `±1.96 × sqrt(SSE / (n − 2))` around the linear fit.
+- **Same-day deduplication:** if multiple snapshots fall on the same UTC date,
+  only the one with the latest `takenAtMillis` is kept.
+- **Resolved items are excluded** — the forecast targets *open* debt only.
+
+> _Screenshot placeholder — add `docs/forecast-chart.png` once the feature ships
+> in a release build._
+
+### CLI usage
+
+```bash
+# 12-week Markdown forecast, auto-selected model
+java -cp technical-debt-accountant.jar \
+  com.jakubjirak.debtaccountant.forecast.DebtForecastCli \
+  --snapshots-dir=.tech-debt/snapshots \
+  --horizon-weeks=12 \
+  --model=auto \
+  --format=md \
+  --out=debt-forecast.md
+
+# Self-contained HTML forecast with inline SVG chart
+java -cp technical-debt-accountant.jar \
+  com.jakubjirak.debtaccountant.forecast.DebtForecastCli \
+  --snapshots-dir=.tech-debt/snapshots \
+  --format=html \
+  --out=debt-forecast.html
+```
+
+### CI guard — `--fail-on-degrading`
+
+Add a job step that makes the pipeline fail when the team is accumulating
+technical debt faster than it is being resolved:
+
+```yaml
+- name: Technical debt forecast
+  run: |
+    java -cp technical-debt-accountant.jar \
+      com.jakubjirak.debtaccountant.forecast.DebtForecastCli \
+      --snapshots-dir=.tech-debt/snapshots \
+      --horizon-weeks=12 \
+      --format=md \
+      --out=debt-forecast.md \
+      --fail-on-degrading
+- uses: actions/upload-artifact@v4
+  with:
+    name: debt-forecast
+    path: debt-forecast.md
+```
+
+Exit codes: `0` OK, `1` argument/I/O error, or `DEGRADING` trend detected
+when `--fail-on-degrading` is set. The output file is written in both cases.
+
 ## 📦 Installation
 
 ### From JetBrains Marketplace

@@ -1,5 +1,40 @@
 # Changelog
 
+## [2026.3.9] - 2026-04-17
+
+### Added
+- **Debt Trend Forecasting & Burndown Projection** — new `Tools → Debt Trend
+  Forecast…` action and `DebtForecastCli` entry point that read persisted
+  digest snapshots and project the backlog forward in time.
+- `com.jakubjirak.debtaccountant.forecast.LinearRegression` — pure-Kotlin OLS
+  implementation returning slope, intercept, r², and residual standard error.
+- `com.jakubjirak.debtaccountant.forecast.ExponentialRegression` — log-linear
+  fit for `y = a · exp(b · x)`.
+- `ForecastModel` enum (`LINEAR` / `EXPONENTIAL` / `AUTO`) — `AUTO` picks the
+  model with the higher r².
+- `TimeSeriesPoint` + `SnapshotHistoryLoader` that reuse the existing
+  `DigestSnapshotStore`, exclude resolved items, order chronologically, and
+  deduplicate same-UTC-date snapshots (keep latest).
+- `DebtForecaster` computes current running averages (7-day / 30-day), trend
+  direction (`IMPROVING` / `FLAT` / `DEGRADING`) from the slope, per-priority
+  trends, week-over-week count delta, burndown date estimate, and per-week
+  predictions with a 95% confidence interval.
+- `ForecastMarkdownReporter` with Executive Summary, Trend Analysis, Priority
+  Breakdown, ASCII-sparkline Burndown, N-week Forecast Table, and Methodology
+  sections.
+- `ForecastHtmlReporter` — self-contained HTML with inline CSS and an inline
+  SVG line chart showing predicted counts with a shaded 95% confidence band.
+  No external fonts, scripts, or CDN references.
+- `DebtForecastCli` supports `--snapshots-dir`, `--horizon-weeks` (default 12),
+  `--model=linear|exponential|auto` (default `auto`), `--format=md|html|json`,
+  `--out`, and `--fail-on-degrading` for CI pipelines. Exits `0` on success or
+  `1` on argument/I/O error or a DEGRADING trend when the guard flag is set.
+- 41 new unit tests (JUnit 5) covering OLS on `y = 2x + 1`, exponential fit on
+  `y = 2 · e^{0.1x}`, degenerate regression inputs (n=0, n=1, constant x/y),
+  loader ordering and same-day deduplication using real `Gson`, forecaster
+  trend direction / burndown / WoW delta, reporter section presence, and CLI
+  happy / `--fail-on-degrading` / invalid argument paths.
+
 ## [2026.3.8] - 2026-04-17
 
 ### Added
