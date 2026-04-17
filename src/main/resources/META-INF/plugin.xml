@@ -37,7 +37,7 @@
 
 <h3>Requirements</h3>
 <ul>
-  <li>IntelliJ IDEA 2024.3+ (or any JetBrains IDE build 243+)</li>
+  <li>IntelliJ IDEA 2025.1+ (build 251+)</li>
   <li>Git4Idea plugin (optional — for Git integration)</li>
   <li>Java 17+</li>
 </ul>

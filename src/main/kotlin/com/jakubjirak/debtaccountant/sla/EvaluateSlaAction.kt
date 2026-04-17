@@ -211,8 +211,7 @@ internal class SlaResultDialog(
     }
 
     private fun exportMarkdown() {
-        val descriptor = FileSaverDescriptor("Export SLA Report", "Save the SLA report as Markdown")
-            .apply { withExtensionFilter("md") }
+        val descriptor = FileSaverDescriptor("Export SLA Report", "Save the SLA report as Markdown", "md")
         val dialog = FileChooserFactory.getInstance().createSaveFileDialog(descriptor, project)
         val wrapper = dialog.save(null as com.intellij.openapi.vfs.VirtualFile?, "sla-report.md") ?: return
         val path = wrapper.file.toPath()

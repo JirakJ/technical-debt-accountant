@@ -193,8 +193,7 @@ internal class DigestPreviewDialog(
 
     private fun saveAs() {
         val ext = if (format == Format.HTML) "html" else "md"
-        val descriptor = FileSaverDescriptor("Save Weekly Digest", "Save the digest to a file.")
-            .apply { withExtensionFilter(ext) }
+        val descriptor = FileSaverDescriptor("Save Weekly Digest", "Save the digest to a file.", ext)
         val saver = FileChooserFactory.getInstance().createSaveFileDialog(descriptor, project)
         val baseDir = project.basePath?.let { LocalFileSystem.getInstance().findFileByPath(it) }
         val target = saver.save(baseDir, "weekly-digest.$ext")

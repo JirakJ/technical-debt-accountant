@@ -306,7 +306,7 @@ Each debt item's cost is calculated from tracked workaround time:
 
 ## 📋 Requirements
 
-- IntelliJ IDEA 2024.3+ (or any JetBrains IDE build 243–252.*)
+- IntelliJ IDEA 2025.1+ (build 251+)
 - Git4Idea plugin (optional — for Git integration features)
 - Java 17+
 
