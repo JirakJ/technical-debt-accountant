@@ -145,6 +145,13 @@
             <add-to-group group-id="ToolsMenu" anchor="last"/>
         </action>
 
+        <action id="TechnicalDebt.GenerateWeeklyDigest"
+                class="com.jakubjirak.debtaccountant.digest.GenerateWeeklyDigestAction"
+                text="Weekly Digest…"
+                description="Generate a weekly technical debt digest report (Markdown/HTML) with WoW delta.">
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+        </action>
+
         <action id="TechnicalDebt.EditSlaPolicy"
                 class="com.jakubjirak.debtaccountant.sla.EditSlaPolicyAction"
                 text="Edit Debt SLA Policy"

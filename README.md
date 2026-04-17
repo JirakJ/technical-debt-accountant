@@ -89,6 +89,49 @@ java -cp technical-debt-accountant.jar \
 
 Exit codes: `0` OK, `1` bad arguments / invalid policy, `2` breaches ≥ 1 when `--fail-on-breach`.
 
+## 📰 Weekly Digest Report
+
+Produce an email-ready weekly status update in one click.
+
+**Tools → Weekly Digest…** generates a Markdown or HTML report with:
+
+- **Summary** — active item count, total estimated cost, new and resolved in period
+- **Priority Breakdown** — counts per Critical / High / Medium / Low
+- **SLA Compliance** — OK / Approaching / Breached from the real `SlaEvaluator`
+- **Top Hotspots** — top 5 files by cost, with item count and highest priority
+- **Sprint Recommendations** — top 5 ROI items using the `SprintPlanningService` / `DollarValuator` wiring
+- **Week-over-Week Delta** — count, dollar and priority-mix deltas when a previous snapshot is supplied
+
+The HTML renderer is self-contained (inline styles, no external fonts or scripts) and includes a
+`prefers-color-scheme: dark` block so it renders cleanly on light and dark mail clients. Snapshots
+are stored as JSON via `DigestSnapshotStore` with atomic writes.
+
+### CI usage
+
+```bash
+# Generate a weekly Markdown digest and save a snapshot for next week's delta
+java -cp technical-debt-accountant.jar \
+  com.jakubjirak.debtaccountant.digest.WeeklyDigestCli \
+  --period=last7 \
+  --format=md \
+  --inventory=.tech-debt/inventory.json \
+  --previous-snapshot=.tech-debt/snapshots/previous.json \
+  --save-snapshot=.tech-debt/snapshots/$(date +%Y-%m-%d).json \
+  --out=weekly-digest.md \
+  --project="My Service" \
+  --hourly-rate=95
+
+# HTML digest for a specific ISO week (2026-W16)
+java -cp technical-debt-accountant.jar \
+  com.jakubjirak.debtaccountant.digest.WeeklyDigestCli \
+  --period=week:2026-W16 \
+  --format=html \
+  --inventory=.tech-debt/inventory.json \
+  --out=weekly-digest.html
+```
+
+Exit codes: `0` OK, `1` argument or I/O error.
+
 ## 📦 Installation
 
 ### From JetBrains Marketplace
