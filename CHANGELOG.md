@@ -1,5 +1,26 @@
 # Changelog
 
+## [2026.3.8] - 2026-04-17
+
+### Added
+- **Weekly Digest Report** — new `Tools → Weekly Digest…` action and `WeeklyDigestCli` entry point
+  that produce a management-ready digest of technical debt in either Markdown or HTML. The report
+  contains Summary, Priority Breakdown, SLA Compliance, Top Hotspots, Sprint Recommendations, and
+  an optional Week-over-Week Delta.
+- `DigestPeriod` with rolling `last7` / `last14` / `last30` windows plus explicit ISO-week
+  (`week:YYYY-Www`) selection. Deterministic `[startMillis, endMillis)` spans in UTC.
+- `TechDebtItemSnapshot` and `DigestSnapshotStore` persist point-in-time inventory snapshots as
+  pretty-printed JSON with atomic (`.tmp` + move) writes, enabling reliable WoW delta computation.
+- `DigestDataCollector` assembles deterministic `DigestData` payloads with injected valuators and
+  an `SlaSummaryProvider` hook — no IntelliJ dependencies, fully unit-testable.
+- `MarkdownDigestRenderer` and `HtmlDigestRenderer` with pipe escaping, HTML entity escaping, and
+  a self-contained dark-mode-aware stylesheet suitable for email delivery.
+- CLI supports `--period`, `--format=md|html`, `--inventory`, `--previous-snapshot`,
+  `--save-snapshot`, `--out`, `--project`, and `--hourly-rate` flags. Exits `0` on success, `1` on
+  argument or I/O errors.
+- 42 new unit tests (JUnit 5) covering period maths, snapshot round-trip, collector aggregations,
+  WoW delta, renderer sections/escaping, and CLI argument handling.
+
 ## [2026.3.7] - 2026-04-17
 
 ### Added
