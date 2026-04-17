@@ -128,5 +128,13 @@
                 icon="AllIcons.Actions.Preview">
             <add-to-group group-id="ToolsMenu" anchor="last"/>
         </action>
+
+        <action id="TechnicalDebt.SuggestSprintItems"
+                class="com.jakubjirak.debtaccountant.planning.SuggestSprintItemsAction"
+                text="Suggest Sprint Items…"
+                description="Recommend a sprint backlog of debt items maximizing ROI within a time budget."
+                icon="AllIcons.Actions.ListChanges">
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+        </action>
     </actions>
 </idea-plugin>

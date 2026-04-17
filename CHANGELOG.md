@@ -1,5 +1,19 @@
 # Changelog
 
+## [2026.3.6] - 2026-04-17
+
+### Added
+- **Sprint Planning Recommender** — new `Tools → Suggest Sprint Items…` action that takes a time
+  budget (hours), optional tag include/exclude filters, a minimum priority, and an overflow flag,
+  then returns a greedy-knapsack sprint backlog maximizing ROI (monthly interest saved ÷ fix hours).
+- Pure-Kotlin `SprintPlanningService` with deterministic sort (ROI desc, priority desc, age desc,
+  id asc), overflow-once support (accepts one oversize top item within +20% of budget), and a
+  Markdown renderer that escapes pipes/brackets/backticks.
+- Result dialog with selectable items table, summary labels, **Copy Markdown** and **Export .md**
+  controls wired to the real `DollarValuator` and `DebtInventoryStore`.
+- 16 unit tests covering filtering, deterministic ordering, overflow bounds, totals, and markdown
+  escaping.
+
 ## [2026.2.5] - 2026-02-14
 
 ### Fixed

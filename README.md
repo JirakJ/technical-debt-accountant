@@ -28,6 +28,27 @@
 - **JIRA integration** — link debt items to JIRA tickets
 - **Trend analytics** — long-term debt trend analysis across the organization
 
+## 🧮 Sprint Planning Recommender
+
+Turn your debt backlog into a ready-to-copy sprint plan.
+
+**Tools → Suggest Sprint Items…** opens a dialog where you enter:
+
+- **Budget (hours)** — how much refactoring capacity the sprint has
+- **Minimum priority** — filter out items below `LOW` / `MEDIUM` / `HIGH` / `CRITICAL`
+- **Include tags** / **Exclude tags** — comma-separated tag filters
+- **Allow overflow** — optionally accept one oversize item up to +20% of the budget
+
+The recommender scores every eligible (unresolved, effort > 0) item by
+`ROI = monthly interest saved ($) ÷ fix effort (hours)` using the configured `DollarValuator`, then
+greedily fills the budget. Ties are broken deterministically by priority weight, then age (older
+first), then id.
+
+The result dialog shows a `JBTable` of selected items plus totals (selected hours, monthly savings,
+item count, declined count). **Copy Markdown** and **Export .md** produce a Jira/GitHub-friendly
+document with a summary table, selected items table, and a collapsed *Declined items* section
+(each declined item carries a reason: `BUDGET`, `FILTERED`, or `NO_EFFORT`).
+
 ## 📦 Installation
 
 ### From JetBrains Marketplace
