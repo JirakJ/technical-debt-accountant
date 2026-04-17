@@ -43,6 +43,7 @@ dependencies {
 
     testImplementation(libs.junit.api)
     testRuntimeOnly(libs.junit.engine)
+    testRuntimeOnly("junit:junit:4.13.2")
 }
 
 // Exclude IDE-provided libraries from plugin distribution
@@ -71,9 +72,11 @@ intellijPlatform {
 
     pluginVerification {
         ides {
-            ide("IC", "2023.2.8")
-            ide("IC", "2024.3")
-            ide("IC", "2025.1.3")
+            ide("IC", "2024.3", false)
+            ide("IC", "2025.1.7", false)
+            ide("IC", "2025.2.6.1", false)
+            ide("IC", "2025.3.4", false)
+            ide("IC", "2026.1", false)
         }
     }
 
@@ -93,7 +96,7 @@ tasks {
     }
 
     wrapper {
-        gradleVersion = "8.12"
+        gradleVersion = "8.13"
     }
 }
 

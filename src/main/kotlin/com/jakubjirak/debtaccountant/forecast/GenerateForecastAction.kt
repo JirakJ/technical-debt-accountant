@@ -87,12 +87,10 @@ class GenerateForecastAction : AnAction() {
     /** User-configurable options for the forecast. */
     private class ForecastOptionsDialog(private val project: Project) : DialogWrapper(project) {
         private val dirField = TextFieldWithBrowseButton().apply {
-            addBrowseFolderListener(
-                "Snapshots Directory",
-                "Select the directory containing digest snapshot JSON files",
-                project,
-                FileChooserDescriptorFactory.createSingleFolderDescriptor()
-            )
+            val descriptor = FileChooserDescriptorFactory.createSingleFolderDescriptor()
+                .withTitle("Snapshots Directory")
+                .withDescription("Select the directory containing digest snapshot JSON files")
+            addBrowseFolderListener(project, descriptor)
         }
         private val horizonSpinner = JSpinner(SpinnerNumberModel(12, 1, 104, 1))
         private val modelCombo = JComboBox(arrayOf("auto", "linear", "exponential"))
@@ -165,9 +163,8 @@ class GenerateForecastAction : AnAction() {
             val ext = if (format == "html") "html" else "md"
             val descriptor = FileSaverDescriptor(
                 "Save Debt Forecast",
-                "Choose destination",
-                ext
-            )
+                "Choose destination"
+            ).apply { withExtensionFilter(ext) }
             val saver = FileChooserFactory.getInstance().createSaveFileDialog(descriptor, project)
             val baseDir = project.basePath?.let { LocalFileSystem.getInstance().findFileByPath(it) }
             val target = saver.save(baseDir, "debt-forecast.$ext")
