@@ -2,6 +2,8 @@
     <id>com.jakubjirak.debtaccountant</id>
     <name>Technical Debt Accountant</name>
     <vendor email="support@jakubjirak.com" url="https://github.com/jakubjirak">Jakub Jirák</vendor>
+    <product-descriptor code="PTECHNICALDEBTA" release-date="20260417" release-version="20264" optional="true"/>
+
 
     <description><![CDATA[<h2>Technical Debt Accountant — Quantify Code Debt in Dollars</h2>
 
