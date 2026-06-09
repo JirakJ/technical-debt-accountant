@@ -1,5 +1,6 @@
 package com.jakubjirak.debtaccountant.ui
 
+import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.project.DumbAware
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.wm.ToolWindow
@@ -46,8 +47,12 @@ class DebtToolWindowFactory : ToolWindowFactory, DumbAware {
         mainPanel.add(actionsPanel, BorderLayout.SOUTH)
 
         store.addListener {
-            populateTable(store, tableModel)
-            updateSummaryLabel(store, summaryLabel)
+            // Store mutations can come from background tasks (scan import, SLA
+            // escalation), so hop to the EDT before touching Swing components.
+            ApplicationManager.getApplication().invokeLater {
+                populateTable(store, tableModel)
+                updateSummaryLabel(store, summaryLabel)
+            }
         }
 
         val content = ContentFactory.getInstance().createContent(mainPanel, "Debt Inventory", false)

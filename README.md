@@ -6,7 +6,24 @@
 
 > Quantify your technical debt in dollars, track workaround costs, and prioritize refactoring by ROI — all inside your JetBrains IDE.
 
+## 📸 Screenshots
+
+| Debt Inventory | TODO/FIXME Scanner |
+|---|---|
+| ![Tech Debt tool window](screenshots/tech-debt-tool-window.png) | ![Scan debt comments](screenshots/scan-debt-comments.png) |
+
+| Management Report | Trend Forecast |
+|---|---|
+| ![Management report](screenshots/management-report.png) | ![Debt forecast](screenshots/debt-forecast.png) |
+
+| Add Debt at Cursor | CSV/JSON Export |
+|---|---|
+| ![Add debt dialog](screenshots/add-debt-dialog.png) | ![Export inventory](screenshots/export-inventory.png) |
+
 ## ✨ Features
+
+- **TODO/FIXME scanner** — `Tools → Scan TODO/FIXME Comments…` imports `TODO` / `FIXME` / `HACK` / `XXX` / `OPTIMIZE` comments as debt items with marker-based category and priority, deduplicated on re-scan; also available as a CLI (`DebtScanCli`) with `--fail-over=<n>` for CI gates
+- **CSV/JSON export** — `Tools → Export Debt Inventory…` exports the backlog with computed workaround and fix costs for Excel / Google Sheets or downstream tooling
 
 - **Debt inventory** — catalog tech debt items with category, priority, description, and estimated fix time
 - **Add debt at cursor** — press **Alt+D** to log a debt item at the current file and line

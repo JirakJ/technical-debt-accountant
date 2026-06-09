@@ -2,6 +2,7 @@ package com.jakubjirak.debtaccountant.ui
 
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.DialogWrapper
+import com.intellij.openapi.ui.ValidationInfo
 import com.jakubjirak.debtaccountant.model.DebtCategory
 import com.jakubjirak.debtaccountant.model.DebtPriority
 import com.jakubjirak.debtaccountant.model.TechDebtItem
@@ -66,6 +67,25 @@ class AddDebtDialog(
         row.add(JLabel(label))
         row.add(component)
         return row
+    }
+
+    override fun doValidate(): ValidationInfo? {
+        if (descriptionArea.text.isBlank()) {
+            return ValidationInfo("Description must not be empty.", descriptionArea)
+        }
+        val lineStart = lineStartField.text.toIntOrNull()
+        if (lineStart == null || lineStart < 0) {
+            return ValidationInfo("Line start must be a non-negative number.", lineStartField)
+        }
+        val lineEnd = lineEndField.text.toIntOrNull()
+        if (lineEnd == null || lineEnd < lineStart) {
+            return ValidationInfo("Line end must be a number ≥ line start.", lineEndField)
+        }
+        val fixMinutes = fixTimeField.text.toIntOrNull()
+        if (fixMinutes == null || fixMinutes <= 0) {
+            return ValidationInfo("Estimated fix time must be a positive number of minutes.", fixTimeField)
+        }
+        return null
     }
 
     override fun doOKAction() {

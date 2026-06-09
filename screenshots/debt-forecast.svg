@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="800" font-family="-apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif">
+  <rect width="1280" height="800" fill="#2B2B2B"/>
+  <rect width="1280" height="36" fill="#3C3F41"/>
+  <circle cx="22" cy="18" r="6" fill="#FF5F57"/>
+  <circle cx="42" cy="18" r="6" fill="#FEBC2E"/>
+  <circle cx="62" cy="18" r="6" fill="#28C840"/>
+  <text x="640" y="23" text-anchor="middle" fill="#9DA0A3" font-size="13">debt-forecast.html — Preview</text>
+
+  <rect x="100" y="60" width="1080" height="716" fill="#FFFFFF"/>
+
+  <text x="140" y="120" fill="#1F2328" font-size="26" font-weight="800">Debt Trend Forecast — acme-payments</text>
+  <text x="140" y="146" fill="#656D76" font-size="13" font-style="italic">Model: AUTO (linear, r² = 0.94) · Horizon: 12 weeks · Generated 2026-06-09</text>
+
+  <!-- KPI cards -->
+  <g>
+    <rect x="140" y="170" width="240" height="86" rx="8" fill="#F6F8FA" stroke="#D0D7DE"/>
+    <text x="160" y="198" fill="#656D76" font-size="12">TREND</text>
+    <text x="160" y="232" fill="#1A7F37" font-size="24" font-weight="800">IMPROVING ↓</text>
+
+    <rect x="400" y="170" width="240" height="86" rx="8" fill="#F6F8FA" stroke="#D0D7DE"/>
+    <text x="420" y="198" fill="#656D76" font-size="12">ACTIVE ITEMS (7-DAY AVG)</text>
+    <text x="420" y="232" fill="#1F2328" font-size="24" font-weight="800">12.3</text>
+
+    <rect x="660" y="170" width="240" height="86" rx="8" fill="#F6F8FA" stroke="#D0D7DE"/>
+    <text x="680" y="198" fill="#656D76" font-size="12">WEEK-OVER-WEEK</text>
+    <text x="680" y="232" fill="#1A7F37" font-size="24" font-weight="800">−3 items</text>
+
+    <rect x="920" y="170" width="240" height="86" rx="8" fill="#F6F8FA" stroke="#D0D7DE"/>
+    <text x="940" y="198" fill="#656D76" font-size="12">PROJECTED BURNDOWN</text>
+    <text x="940" y="232" fill="#0969DA" font-size="24" font-weight="800">2026-09-14</text>
+  </g>
+
+  <!-- chart -->
+  <text x="140" y="306" fill="#1F2328" font-size="18" font-weight="700">Projected active debt items (95% confidence band)</text>
+  <g>
+    <!-- axes -->
+    <line x1="180" y1="340" x2="180" y2="640" stroke="#D0D7DE" stroke-width="1"/>
+    <line x1="180" y1="640" x2="1140" y2="640" stroke="#D0D7DE" stroke-width="1"/>
+    <!-- y labels + gridlines -->
+    <g fill="#656D76" font-size="11">
+      <text x="158" y="345" text-anchor="end">20</text><line x1="180" y1="340" x2="1140" y2="340" stroke="#F0F2F4"/>
+      <text x="158" y="420" text-anchor="end">15</text><line x1="180" y1="415" x2="1140" y2="415" stroke="#F0F2F4"/>
+      <text x="158" y="495" text-anchor="end">10</text><line x1="180" y1="490" x2="1140" y2="490" stroke="#F0F2F4"/>
+      <text x="158" y="570" text-anchor="end">5</text><line x1="180" y1="565" x2="1140" y2="565" stroke="#F0F2F4"/>
+      <text x="158" y="645" text-anchor="end">0</text>
+    </g>
+    <!-- x labels -->
+    <g fill="#656D76" font-size="11">
+      <text x="180" y="662">Apr 13</text>
+      <text x="340" y="662">May 4</text>
+      <text x="500" y="662">May 25</text>
+      <text x="660" y="662">Jun 9</text>
+      <text x="820" y="662">Jul 6</text>
+      <text x="980" y="662">Aug 3</text>
+      <text x="1110" y="662">Sep 14</text>
+    </g>
+
+    <!-- confidence band (future) -->
+    <path d="M 660 462 L 760 480 L 860 500 L 960 522 L 1060 546 L 1130 562
+             L 1130 642 L 1060 616 L 960 580 L 860 552 L 760 524 L 660 502 Z"
+          fill="#0969DA" opacity="0.12"/>
+
+    <!-- history line -->
+    <polyline points="180,370 260,385 340,378 420,405 500,430 580,448 660,482"
+              fill="none" stroke="#1F2328" stroke-width="2.5"/>
+    <g fill="#1F2328">
+      <circle cx="180" cy="370" r="4"/><circle cx="260" cy="385" r="4"/><circle cx="340" cy="378" r="4"/>
+      <circle cx="420" cy="405" r="4"/><circle cx="500" cy="430" r="4"/><circle cx="580" cy="448" r="4"/>
+      <circle cx="660" cy="482" r="4"/>
+    </g>
+
+    <!-- forecast line (dashed) -->
+    <polyline points="660,482 760,502 860,526 960,551 1060,581 1130,602"
+              fill="none" stroke="#0969DA" stroke-width="2.5" stroke-dasharray="7 6"/>
+    <!-- today marker -->
+    <line x1="660" y1="340" x2="660" y2="640" stroke="#CF222E" stroke-width="1.5" stroke-dasharray="4 4"/>
+    <text x="668" y="356" fill="#CF222E" font-size="12" font-weight="700">today</text>
+  </g>
+
+  <!-- legend -->
+  <g font-size="13">
+    <line x1="180" y1="700" x2="220" y2="700" stroke="#1F2328" stroke-width="2.5"/>
+    <text x="230" y="705" fill="#1F2328">History (digest snapshots)</text>
+    <line x1="440" y1="700" x2="480" y2="700" stroke="#0969DA" stroke-width="2.5" stroke-dasharray="7 6"/>
+    <text x="490" y="705" fill="#1F2328">Forecast</text>
+    <rect x="590" y="692" width="40" height="14" fill="#0969DA" opacity="0.12"/>
+    <text x="640" y="705" fill="#1F2328">95% confidence band</text>
+  </g>
+  <text x="140" y="748" fill="#656D76" font-size="12" font-style="italic">Tools → Debt Trend Forecast… · also available as CLI for CI: --fail-on-degrading</text>
+</svg>

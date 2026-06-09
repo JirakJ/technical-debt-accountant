@@ -119,16 +119,16 @@ Long-term debt trend analysis across the organization.
 
 ## 📸 Screenshots & Media
 
+Available in [`screenshots/`](screenshots/) at 1280×800:
+
 | # | Screenshot | Description |
 |---|-----------|-------------|
-| 1 | `add-debt-dialog.png` | Add Debt Item dialog with category, priority, description, and estimated fix time fields |
-| 2 | `tech-debt-tool-window.png` | Tech Debt tool window showing debt inventory table with active count, categories, and priorities |
-| 3 | `gutter-icons.png` | Priority-colored gutter icons in the editor with debt tooltips on hover |
-| 4 | `hotspot-detection.png` | Hotspot view showing files with the highest weighted debt scores |
-| 5 | `dollar-valuation.png` | Dollar valuation panel showing workaround cost, fix cost, and monthly interest (Pro) |
-| 6 | `roi-calculator.png` | ROI calculator ranking debt items by breakeven months (Pro) |
-| 7 | `burndown-chart.png` | Burndown chart tracking debt resolution trends over time (Pro) |
-| 8 | `management-report.png` | Generated executive report with summary, hotspots, and ROI opportunities (Pro) |
+| 1 | `tech-debt-tool-window.png` | Tech Debt tool window with debt inventory table, dollar summary, and priority-colored gutter icons in the editor |
+| 2 | `scan-debt-comments.png` | TODO/FIXME/HACK/XXX/OPTIMIZE comment scan preview with marker→category/priority mapping |
+| 3 | `add-debt-dialog.png` | Add Debt Item dialog (Alt+D) with category, priority, description, and estimated fix time fields |
+| 4 | `management-report.png` | Generated executive report with summary, hotspots, and ROI opportunities (Pro) |
+| 5 | `debt-forecast.png` | Debt trend forecast with burndown projection and 95% confidence band (Pro) |
+| 6 | `export-inventory.png` | CSV/JSON export with computed workaround and fix costs |
 
 ---
 

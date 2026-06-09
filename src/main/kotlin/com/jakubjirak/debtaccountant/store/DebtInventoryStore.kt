@@ -17,7 +17,7 @@ class DebtInventoryStore(private val project: Project) {
 
     private val items = mutableListOf<TechDebtItem>()
     private val gson: Gson = GsonBuilder().setPrettyPrinting().create()
-    private val listeners = mutableListOf<() -> Unit>()
+    private val listeners = java.util.concurrent.CopyOnWriteArrayList<() -> Unit>()
 
     fun addListener(listener: () -> Unit) {
         listeners.add(listener)

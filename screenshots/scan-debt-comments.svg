@@ -1,0 +1,106 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="800" font-family="-apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif">
+  <defs>
+    <style>
+      .mono { font-family: 'JetBrains Mono', 'SF Mono', Menlo, monospace; }
+      .hdr { fill: #BBBBBB; font-size: 13px; font-weight: 600; }
+      .cell { fill: #BBBBBB; font-size: 13px; }
+    </style>
+  </defs>
+
+  <!-- IDE backdrop, dimmed -->
+  <rect width="1280" height="800" fill="#2B2B2B"/>
+  <rect width="1280" height="36" fill="#3C3F41"/>
+  <circle cx="22" cy="18" r="6" fill="#FF5F57"/>
+  <circle cx="42" cy="18" r="6" fill="#FEBC2E"/>
+  <circle cx="62" cy="18" r="6" fill="#28C840"/>
+  <text x="640" y="23" text-anchor="middle" fill="#9DA0A3" font-size="13">acme-payments — IntelliJ IDEA</text>
+  <rect y="36" width="1280" height="764" fill="#2B2B2B" opacity="0.6"/>
+
+  <!-- Dialog -->
+  <rect x="200" y="120" width="880" height="560" rx="8" fill="#3C3F41" stroke="#515658"/>
+  <rect x="200" y="120" width="880" height="40" rx="8" fill="#45494A"/>
+  <rect x="200" y="140" width="880" height="20" fill="#45494A"/>
+  <text x="220" y="146" fill="#FFFFFF" font-size="14" font-weight="600">Debt Comment Scan — 7 new</text>
+
+  <text x="220" y="186" fill="#BBBBBB" font-size="13">New debt comments not yet in the inventory. OK imports them with marker-based category and priority.</text>
+
+  <!-- table header -->
+  <rect x="220" y="200" width="840" height="28" fill="#45494A"/>
+  <text x="232" y="219" class="hdr">Marker</text>
+  <text x="320" y="219" class="hdr">Priority</text>
+  <text x="408" y="219" class="hdr">Category</text>
+  <text x="570" y="219" class="hdr">Location</text>
+  <text x="820" y="219" class="hdr">Comment</text>
+
+  <g>
+    <rect x="220" y="228" width="840" height="26" fill="#3C3F41"/>
+    <text x="232" y="246" class="cell mono" fill="#E06C75" font-weight="700">FIXME</text>
+    <text x="320" y="246" class="cell" fill="#E5986C">High</text>
+    <text x="408" y="246" class="cell">Code Smell</text>
+    <text x="570" y="246" class="cell mono">RefundService.kt:43</text>
+    <text x="820" y="246" class="cell">retry logic duplicated</text>
+  </g>
+  <g>
+    <rect x="220" y="254" width="840" height="26" fill="#414547"/>
+    <text x="232" y="272" class="cell mono" fill="#C678DD" font-weight="700">HACK</text>
+    <text x="320" y="272" class="cell" fill="#E5986C">High</text>
+    <text x="408" y="272" class="cell">Architecture Violation</text>
+    <text x="570" y="272" class="cell mono">LegacyGatewayAdapter.kt:45</text>
+    <text x="820" y="272" class="cell">sleep to avoid race</text>
+  </g>
+  <g>
+    <rect x="220" y="280" width="840" height="26" fill="#3C3F41"/>
+    <text x="232" y="298" class="cell mono" fill="#61AFEF" font-weight="700">OPTIMIZE</text>
+    <text x="320" y="298" class="cell" fill="#E5C07B">Medium</text>
+    <text x="408" y="298" class="cell">Performance Issue</text>
+    <text x="570" y="298" class="cell mono">LedgerSync.kt:88</text>
+    <text x="820" y="298" class="cell">full table scan per tick</text>
+  </g>
+  <g>
+    <rect x="220" y="306" width="840" height="26" fill="#414547"/>
+    <text x="232" y="324" class="cell mono" fill="#E06C75" font-weight="700">XXX</text>
+    <text x="320" y="324" class="cell" fill="#E5986C">High</text>
+    <text x="408" y="324" class="cell">Code Smell</text>
+    <text x="570" y="324" class="cell mono">WebhookController.kt:120</text>
+    <text x="820" y="324" class="cell">remove before release</text>
+  </g>
+  <g>
+    <rect x="220" y="332" width="840" height="26" fill="#3C3F41"/>
+    <text x="232" y="350" class="cell mono" fill="#98C379" font-weight="700">TODO</text>
+    <text x="320" y="350" class="cell" fill="#E5C07B">Medium</text>
+    <text x="408" y="350" class="cell">Code Smell</text>
+    <text x="570" y="350" class="cell mono">FeatureFlags.kt:12</text>
+    <text x="820" y="350" class="cell">move to remote config</text>
+  </g>
+  <g>
+    <rect x="220" y="358" width="840" height="26" fill="#414547"/>
+    <text x="232" y="376" class="cell mono" fill="#98C379" font-weight="700">TODO</text>
+    <text x="320" y="376" class="cell" fill="#E5C07B">Medium</text>
+    <text x="408" y="376" class="cell">Code Smell</text>
+    <text x="570" y="376" class="cell mono">CurrencyMath.kt:31</text>
+    <text x="820" y="376" class="cell">extract rounding helper</text>
+  </g>
+  <g>
+    <rect x="220" y="384" width="840" height="26" fill="#3C3F41"/>
+    <text x="232" y="402" class="cell mono" fill="#98C379" font-weight="700">TODO</text>
+    <text x="320" y="402" class="cell" fill="#E5C07B">Medium</text>
+    <text x="408" y="402" class="cell">Code Smell</text>
+    <text x="570" y="402" class="cell mono">build.gradle.kts:54</text>
+    <text x="820" y="402" class="cell">bump serialization lib</text>
+  </g>
+
+  <!-- info panel -->
+  <rect x="220" y="440" width="840" height="120" rx="6" fill="#2F3537" stroke="#43484A"/>
+  <text x="240" y="470" fill="#BBBBBB" font-size="13" font-weight="600">How markers map to debt items</text>
+  <text x="240" y="496" fill="#9DA0A3" font-size="13"><tspan fill="#E06C75" font-weight="700">FIXME</tspan> / <tspan fill="#E06C75" font-weight="700">XXX</tspan> → Code Smell · High</text>
+  <text x="660" y="496" fill="#9DA0A3" font-size="13"><tspan fill="#C678DD" font-weight="700">HACK</tspan> → Architecture Violation · High</text>
+  <text x="240" y="522" fill="#9DA0A3" font-size="13"><tspan fill="#61AFEF" font-weight="700">OPTIMIZE</tspan> → Performance Issue · Medium</text>
+  <text x="660" y="522" fill="#9DA0A3" font-size="13"><tspan fill="#98C379" font-weight="700">TODO</tspan> → Code Smell · Medium</text>
+  <text x="240" y="548" fill="#9DA0A3" font-size="13">Already-imported comments are deduplicated automatically — re-scan any time.</text>
+
+  <!-- buttons -->
+  <rect x="770" y="610" width="160" height="34" rx="4" fill="#4A88C7"/>
+  <text x="850" y="632" text-anchor="middle" fill="#FFFFFF" font-size="13">Import 7 Item(s)</text>
+  <rect x="950" y="610" width="100" height="34" rx="4" fill="#4F5355" stroke="#5E6264"/>
+  <text x="1000" y="632" text-anchor="middle" fill="#BBBBBB" font-size="13">Cancel</text>
+</svg>
