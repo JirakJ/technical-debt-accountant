@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="800" font-family="-apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif">
+  <defs>
+    <style>.mono { font-family: 'JetBrains Mono', 'SF Mono', Menlo, monospace; }</style>
+  </defs>
+
+  <rect width="1280" height="800" fill="#2B2B2B"/>
+  <rect width="1280" height="36" fill="#3C3F41"/>
+  <circle cx="22" cy="18" r="6" fill="#FF5F57"/>
+  <circle cx="42" cy="18" r="6" fill="#FEBC2E"/>
+  <circle cx="62" cy="18" r="6" fill="#28C840"/>
+  <text x="640" y="23" text-anchor="middle" fill="#9DA0A3" font-size="13">acme-payments — IntelliJ IDEA</text>
+
+  <!-- editor backdrop with cursor context -->
+  <g class="mono" font-size="13">
+    <text x="20" y="80" fill="#606366">41</text>
+    <text x="56" y="80" fill="#A9B7C6">class RefundService(private val config: GatewayConfig) {</text>
+    <text x="20" y="104" fill="#606366">42</text>
+    <text x="72" y="104" fill="#CC7832">fun</text>
+    <text x="104" y="104" fill="#FFC66D">processRefund</text>
+    <text x="212" y="104" fill="#A9B7C6">(order: Order): Result {</text>
+    <text x="20" y="128" fill="#606366">43</text>
+    <text x="88" y="128" fill="#808080">// FIXME: retry logic duplicated from CheckoutService</text>
+    <text x="20" y="152" fill="#606366">44</text>
+    <text x="88" y="152" fill="#A9B7C6">val gateway = LegacyGatewayAdapter(config)</text>
+  </g>
+  <rect x="44" y="118" width="8" height="8" rx="2" fill="#E06C75"/>
+  <rect y="170" width="1280" height="630" fill="#2B2B2B" opacity="0.55"/>
+
+  <!-- dialog -->
+  <rect x="340" y="180" width="600" height="540" rx="8" fill="#3C3F41" stroke="#515658"/>
+  <rect x="340" y="180" width="600" height="40" rx="8" fill="#45494A"/>
+  <rect x="340" y="200" width="600" height="20" fill="#45494A"/>
+  <text x="360" y="206" fill="#FFFFFF" font-size="14" font-weight="600">Add Technical Debt Item</text>
+  <text x="920" y="206" text-anchor="end" fill="#808080" font-size="12">Alt+D</text>
+
+  <g font-size="13">
+    <text x="364" y="252" fill="#BBBBBB">File:</text>
+    <rect x="364" y="262" width="552" height="30" rx="4" fill="#45494A" stroke="#5E6264"/>
+    <text x="376" y="282" fill="#DDDDDD" class="mono">src/payment/RefundService.kt</text>
+
+    <text x="364" y="318" fill="#BBBBBB">Line Start:</text>
+    <rect x="364" y="328" width="120" height="30" rx="4" fill="#45494A" stroke="#5E6264"/>
+    <text x="376" y="348" fill="#DDDDDD" class="mono">43</text>
+    <text x="520" y="318" fill="#BBBBBB">Line End:</text>
+    <rect x="520" y="328" width="120" height="30" rx="4" fill="#45494A" stroke="#5E6264"/>
+    <text x="532" y="348" fill="#DDDDDD" class="mono">47</text>
+
+    <text x="364" y="384" fill="#BBBBBB">Category:</text>
+    <rect x="364" y="394" width="270" height="30" rx="4" fill="#45494A" stroke="#5E6264"/>
+    <text x="376" y="414" fill="#DDDDDD">Code Smell</text>
+    <path d="M 614 404 l 6 8 l 6 -8 z" fill="#BBBBBB"/>
+
+    <text x="660" y="384" fill="#BBBBBB">Priority:</text>
+    <rect x="660" y="394" width="256" height="30" rx="4" fill="#45494A" stroke="#5E6264"/>
+    <text x="672" y="414" fill="#E5986C" font-weight="600">High</text>
+    <path d="M 896 404 l 6 8 l 6 -8 z" fill="#BBBBBB"/>
+
+    <text x="364" y="450" fill="#BBBBBB">Description:</text>
+    <rect x="364" y="460" width="552" height="80" rx="4" fill="#45494A" stroke="#5E6264"/>
+    <text x="376" y="482" fill="#DDDDDD">Retry logic is copy-pasted from CheckoutService; every gateway</text>
+    <text x="376" y="502" fill="#DDDDDD">change must be applied twice. Extract a shared RetryPolicy.</text>
+
+    <text x="364" y="572" fill="#BBBBBB">Est. Fix (min):</text>
+    <rect x="364" y="582" width="120" height="30" rx="4" fill="#45494A" stroke="#5E6264"/>
+    <text x="376" y="602" fill="#DDDDDD" class="mono">150</text>
+
+    <text x="520" y="572" fill="#BBBBBB">Tags (comma-sep):</text>
+    <rect x="520" y="582" width="396" height="30" rx="4" fill="#45494A" stroke="#5E6264"/>
+    <text x="532" y="602" fill="#DDDDDD" class="mono">payments, refactoring, q3-okr</text>
+  </g>
+
+  <rect x="650" y="650" width="90" height="34" rx="4" fill="#4A88C7"/>
+  <text x="695" y="672" text-anchor="middle" fill="#FFFFFF" font-size="13">OK</text>
+  <rect x="756" y="650" width="100" height="34" rx="4" fill="#4F5355" stroke="#5E6264"/>
+  <text x="806" y="672" text-anchor="middle" fill="#BBBBBB" font-size="13">Cancel</text>
+</svg>

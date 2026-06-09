@@ -1,5 +1,39 @@
 # Changelog
 
+## [2026.6.0] - 2026-06-09
+
+### Added
+- **TODO/FIXME Comment Scanner** — new `Tools → Scan TODO/FIXME Comments…`
+  action walks the project tree, finds `TODO` / `FIXME` / `HACK` / `XXX` /
+  `OPTIMIZE` comment markers (line, block, hash, HTML, and SQL comment styles),
+  previews them in a table, and imports them as debt items with marker-based
+  category, priority, and fix estimate. Imported items are tagged `scanned`
+  and deduplicated on re-scan by file+line and file+description.
+- `DebtScanCli` — CI-friendly CLI entry point with `--root`, `--inventory`
+  (dedup against existing inventory), `--format=md|json`, `--out`, and
+  `--fail-over=<n>` (exit 2 when more than `n` new markers are found).
+- **CSV/JSON Inventory Export** — new `Tools → Export Debt Inventory…` action
+  exports the backlog as RFC 4180 CSV (Excel/Sheets-friendly) or JSON with a
+  summary block, including computed workaround and fix dollar costs from the
+  configured hourly rate. Optionally includes resolved items.
+- Marketplace-ready screenshots in `screenshots/` (tool window, scanner,
+  add-debt dialog, management report, forecast, export), referenced from the
+  README and listing docs.
+- 55 new unit tests (JUnit 5) covering marker detection across comment styles,
+  non-matches (lowercase, string literals, longer words), directory-walk skip
+  rules and binary detection, dedup logic, CLI argument/exit-code paths, CSV
+  escaping/quoting, ISO-8601 timestamps, and JSON summary math. Suite total:
+  221 tests, all green.
+
+### Fixed
+- `AddDebtDialog` now validates input before saving: non-empty description,
+  numeric non-negative line range with `lineEnd ≥ lineStart`, and a positive
+  fix-time estimate.
+- Tech Debt tool window updates triggered from background tasks (scan import,
+  SLA escalation) are now dispatched on the EDT instead of the calling thread.
+- `DebtInventoryStore` listener registration/notification is now thread-safe
+  (`CopyOnWriteArrayList`).
+
 ## [2026.4.2] - 2026-04-17
 
 ### Changed

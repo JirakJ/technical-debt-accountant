@@ -2,7 +2,7 @@
     <id>com.jakubjirak.debtaccountant</id>
     <name>Technical Debt Accountant</name>
     <vendor email="support@jakubjirak.com" url="https://github.com/jakubjirak">Jakub Jirák</vendor>
-    <product-descriptor code="PTECHNICALDEBTA" release-date="20260417" release-version="20264" optional="true"/>
+    <product-descriptor code="PDEBTACCOUNTANT" release-date="20260609" release-version="20266" optional="true"/>
 
 
     <description><![CDATA[<h2>Technical Debt Accountant — Quantify Code Debt in Dollars</h2>
@@ -23,6 +23,7 @@
 
 <h3>Analysis and Detection</h3>
 <ul>
+  <li><b>TODO/FIXME Scanner</b> — Imports TODO/FIXME/HACK/XXX/OPTIMIZE comments as debt items with marker-based category and priority; deduplicates on re-scan</li>
   <li><b>Hotspot Detection</b> — Identifies files with the highest debt concentration by weighted score</li>
   <li><b>Git Integration</b> — Links debt items to commits and tracks file authors via blame</li>
   <li><b>Project Persistence</b> — Data stored in .tech-debt/inventory.json for Git tracking</li>
@@ -35,6 +36,7 @@
   <li><b>ROI Calculator</b> — Calculates breakeven months and prioritizes by return on investment</li>
   <li><b>Burndown Charts</b> — Tracks debt resolution trends over time</li>
   <li><b>Management Reports</b> — Executive-ready Markdown reports with summaries and ROI opportunities</li>
+  <li><b>CSV/JSON Export</b> — Share the backlog with management in Excel/Sheets, with computed dollar costs</li>
 </ul>
 
 <h3>Requirements</h3>
@@ -51,18 +53,12 @@
 </ul>]]></description>
 
     <change-notes><![CDATA[
-        <h3>What's New</h3>
+        <h3>2026.6.0</h3>
         <ul>
-            <li><b>Debt Inventory</b> - Catalog technical debt items with 9 categories, 4 priority levels, descriptions, and estimated fix times</li>
-            <li><b>Add Debt at Cursor</b> - Press Alt+D to log a debt item at the current file and line with auto-filled location</li>
-            <li><b>Workaround Timer</b> - Track time spent on workarounds with start/stop timer or manual minute logging</li>
-            <li><b>Hotspot Detection</b> - Identifies files with the highest debt concentration using weighted scoring</li>
-            <li><b>Git Integration</b> - Links debt items to commits and tracks file authors via Git blame</li>
-            <li><b>Gutter Icons</b> - Priority-colored markers in the editor gutter with debt tooltips</li>
-            <li><b>Dollar Valuation</b> - Converts workaround time to dollar costs using configurable hourly rates</li>
-            <li><b>ROI Calculator</b> - Calculates breakeven months and prioritizes refactoring by return on investment</li>
-            <li><b>Burndown Charts</b> - Tracks debt resolution trends over time with improving, stable, or worsening indicators</li>
-            <li><b>Management Reports</b> - Generates executive-ready Markdown reports with summaries, hotspots, and ROI opportunities</li>
+            <li><b>TODO/FIXME Comment Scanner</b> - Tools → Scan TODO/FIXME Comments… imports TODO/FIXME/HACK/XXX/OPTIMIZE comments as debt items with marker-based category and priority; re-scans deduplicate automatically. A CLI entry point with --fail-over supports CI gates</li>
+            <li><b>CSV/JSON Inventory Export</b> - Tools → Export Debt Inventory… exports the backlog with computed workaround and fix costs for Excel/Sheets or downstream tooling</li>
+            <li><b>Input Validation</b> - The Add Debt Item dialog now validates description, line range, and fix estimate before saving</li>
+            <li><b>Stability</b> - Tool window updates triggered from background tasks (scan import, SLA escalation) are now dispatched on the UI thread; inventory listeners are thread-safe</li>
         </ul>
     ]]></change-notes>
 
@@ -159,6 +155,22 @@
                 text="Debt Trend Forecast…"
                 description="Project debt count, dollars and burndown from digest snapshot history."
                 icon="AllIcons.Actions.ShowAsTree">
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+        </action>
+
+        <action id="TechnicalDebt.ScanDebtComments"
+                class="com.jakubjirak.debtaccountant.scanner.ScanDebtCommentsAction"
+                text="Scan TODO/FIXME Comments…"
+                description="Scan the project for TODO/FIXME/HACK/XXX/OPTIMIZE comments and import them as debt items."
+                icon="AllIcons.Actions.Find">
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+        </action>
+
+        <action id="TechnicalDebt.ExportInventory"
+                class="com.jakubjirak.debtaccountant.export.ExportInventoryAction"
+                text="Export Debt Inventory…"
+                description="Export the debt inventory as CSV or JSON with computed dollar costs."
+                icon="AllIcons.ToolbarDecorator.Export">
             <add-to-group group-id="ToolsMenu" anchor="last"/>
         </action>
 
