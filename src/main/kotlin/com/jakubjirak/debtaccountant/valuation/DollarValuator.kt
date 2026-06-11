@@ -43,6 +43,12 @@ class DollarValuator {
         return items.sumOf { it.estimatedFixMinutes * (hourlyRate / 60.0) }
     }
 
+    /** Sum of recurring monthly interest (last-30-day workaround cost) across [items]. */
+    fun totalMonthlyInterest(items: List<TechDebtItem>): Double {
+        val hourlyRate = DebtAccountantSettings.getInstance().hourlyRate
+        return items.sumOf { calculateMonthlyInterest(it, hourlyRate) }
+    }
+
     fun formatCurrency(amount: Double, currencyCode: String = "USD"): String {
         return try {
             val format = NumberFormat.getCurrencyInstance(getLocaleForCurrency(currencyCode))

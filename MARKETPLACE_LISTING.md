@@ -8,7 +8,7 @@
 |-------|-------|
 | **Name** | Technical Debt Accountant |
 | **Plugin ID** | `com.jakubjirak.debtaccountant` |
-| **Version** | 2026.2.11 |
+| **Version** | 2026.7.0 |
 | **Category** | Code Quality |
 | **Tags** | `technical-debt`, `code-quality`, `refactoring`, `roi`, `debt-tracking`, `workaround`, `hotspot`, `maintenance`, `metrics` |
 
@@ -123,12 +123,13 @@ Available in [`screenshots/`](screenshots/) at 1280×800:
 
 | # | Screenshot | Description |
 |---|-----------|-------------|
-| 1 | `tech-debt-tool-window.png` | Tech Debt tool window with debt inventory table, dollar summary, and priority-colored gutter icons in the editor |
-| 2 | `scan-debt-comments.png` | TODO/FIXME/HACK/XXX/OPTIMIZE comment scan preview with marker→category/priority mapping |
-| 3 | `add-debt-dialog.png` | Add Debt Item dialog (Alt+D) with category, priority, description, and estimated fix time fields |
-| 4 | `management-report.png` | Generated executive report with summary, hotspots, and ROI opportunities (Pro) |
-| 5 | `debt-forecast.png` | Debt trend forecast with burndown projection and 95% confidence band (Pro) |
-| 6 | `export-inventory.png` | CSV/JSON export with computed workaround and fix costs |
+| 1 | `debt-health-score.png` | Debt Health Score — A–F grade with gauge, monthly interest, budget status, and the status bar widget |
+| 2 | `tech-debt-tool-window.png` | Tech Debt tool window with debt inventory table, health grade + dollar summary, and priority-colored gutter icons in the editor |
+| 3 | `scan-debt-comments.png` | TODO/FIXME/HACK/XXX/OPTIMIZE comment scan preview with marker→category/priority mapping |
+| 4 | `add-debt-dialog.png` | Add Debt Item dialog (Alt+D) with category, priority, description, and estimated fix time fields |
+| 5 | `management-report.png` | Generated executive report with summary, hotspots, and ROI opportunities (Pro) |
+| 6 | `debt-forecast.png` | Debt trend forecast with burndown projection and 95% confidence band (Pro) |
+| 7 | `export-inventory.png` | CSV/JSON export with computed workaround and fix costs |
 
 ---
 

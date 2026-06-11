@@ -26,6 +26,14 @@ class DebtAccountantConfigurable : BoundConfigurable("Technical Debt Accountant"
                         { settings.currency = it ?: "USD" }
                     )
             }
+            row("Monthly debt budget:") {
+                textField()
+                    .bindText(
+                        { settings.debtBudgetDollars.toString() },
+                        { settings.debtBudgetDollars = it.toDoubleOrNull()?.coerceAtLeast(0.0) ?: 0.0 }
+                    )
+                    .comment("Status bar flags the project as over budget when monthly interest exceeds this (0 = no budget)")
+            }
             row("") {
                 comment("Used to calculate dollar value of tech debt")
             }

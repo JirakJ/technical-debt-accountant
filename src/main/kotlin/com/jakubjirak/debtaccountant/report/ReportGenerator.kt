@@ -1,5 +1,6 @@
 package com.jakubjirak.debtaccountant.report
 
+import com.jakubjirak.debtaccountant.health.DebtHealthScorer
 import com.jakubjirak.debtaccountant.hotspot.HotspotDetector
 import com.jakubjirak.debtaccountant.model.DebtCategory
 import com.jakubjirak.debtaccountant.model.DebtPriority
@@ -18,6 +19,10 @@ class ReportGenerator {
 
     fun generateReport(projectName: String, items: List<TechDebtItem>, currency: String): DebtReport {
         val activeItems = items.filter { !it.isResolved }
+        val health = DebtHealthScorer.score(
+            items = activeItems,
+            monthlyInterest = valuator.totalMonthlyInterest(activeItems)
+        )
 
         return DebtReport(
             projectName = projectName,
@@ -30,7 +35,10 @@ class ReportGenerator {
             topHotspots = hotspotDetector.detectHotspots(items, 5),
             topRoiOpportunities = roiCalculator.getTopRoiOpportunities(activeItems, 5),
             categoryBreakdown = activeItems.groupBy { it.category }.mapValues { it.value.size },
-            priorityBreakdown = activeItems.groupBy { it.priority }.mapValues { it.value.size }
+            priorityBreakdown = activeItems.groupBy { it.priority }.mapValues { it.value.size },
+            healthScore = health.score,
+            healthGrade = health.grade.letter,
+            healthLabel = health.grade.label
         )
     }
 
@@ -48,6 +56,7 @@ class ReportGenerator {
         sb.appendLine()
         sb.appendLine("| Metric | Value |")
         sb.appendLine("|--------|-------|")
+        sb.appendLine("| Debt Health Grade | ${report.healthGrade} — ${report.healthLabel} (${report.healthScore}/100) |")
         sb.appendLine("| Active Debt Items | ${report.activeItems} |")
         sb.appendLine("| Resolved Items | ${report.resolvedItems} |")
         sb.appendLine(
