@@ -12,5 +12,8 @@ data class DebtReport(
     val topHotspots: List<FileHotspot>,
     val topRoiOpportunities: List<DebtValuation>,
     val categoryBreakdown: Map<DebtCategory, Int>,
-    val priorityBreakdown: Map<DebtPriority, Int>
+    val priorityBreakdown: Map<DebtPriority, Int>,
+    val healthScore: Int = 100,
+    val healthGrade: String = "A",
+    val healthLabel: String = "Excellent"
 )

@@ -7,6 +7,7 @@ import com.intellij.openapi.wm.ToolWindow
 import com.intellij.openapi.wm.ToolWindowFactory
 import com.intellij.ui.components.JBScrollPane
 import com.intellij.ui.content.ContentFactory
+import com.jakubjirak.debtaccountant.health.DebtHealthScorer
 import com.jakubjirak.debtaccountant.report.ReportGenerator
 import com.jakubjirak.debtaccountant.settings.DebtAccountantSettings
 import com.jakubjirak.debtaccountant.store.DebtInventoryStore
@@ -60,12 +61,20 @@ class DebtToolWindowFactory : ToolWindowFactory, DumbAware {
     }
 
     private fun updateSummaryLabel(store: DebtInventoryStore, label: JLabel) {
-        val activeCount = store.getActiveItemCount()
+        val active = store.getActiveItems()
         val valuator = DollarValuator()
-        val totalCost = valuator.totalWorkaroundCost(store.getActiveItems())
+        val totalCost = valuator.totalWorkaroundCost(active)
         val settings = DebtAccountantSettings.getInstance()
-        label.text = "Active Items: $activeCount  |  " +
-            "Total Workaround Cost: ${valuator.formatCurrency(totalCost, settings.currency)}"
+        val health = DebtHealthScorer.score(
+            items = active,
+            monthlyInterest = valuator.totalMonthlyInterest(active),
+            budgetDollars = settings.debtBudgetDollars
+        )
+        val budgetSuffix = if (health.overBudget) "  |  ⚠ Over monthly budget" else ""
+        label.text = "Health: ${health.grade.letter} (${health.score}/100)  |  " +
+            "Active Items: ${active.size}  |  " +
+            "Total Workaround Cost: ${valuator.formatCurrency(totalCost, settings.currency)}" +
+            budgetSuffix
     }
 
     private fun populateTable(store: DebtInventoryStore, tableModel: DefaultTableModel) {

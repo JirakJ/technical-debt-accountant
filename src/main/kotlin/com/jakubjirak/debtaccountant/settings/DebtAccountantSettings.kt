@@ -17,7 +17,8 @@ class DebtAccountantSettings : PersistentStateComponent<DebtAccountantSettings.S
         var inventoryPath: String = ".tech-debt",
         var autoDetectEnabled: Boolean = true,
         var maxFreeItems: Int = 50,
-        var showGutterIcons: Boolean = true
+        var showGutterIcons: Boolean = true,
+        var debtBudgetDollars: Double = 0.0
     )
 
     private var state = State()
@@ -51,6 +52,11 @@ class DebtAccountantSettings : PersistentStateComponent<DebtAccountantSettings.S
     var showGutterIcons: Boolean
         get() = state.showGutterIcons
         set(value) { state.showGutterIcons = value }
+
+    /** Monthly debt-interest budget in [currency]; `0.0` disables budget checks. */
+    var debtBudgetDollars: Double
+        get() = state.debtBudgetDollars
+        set(value) { state.debtBudgetDollars = value }
 
     companion object {
         fun getInstance(): DebtAccountantSettings =

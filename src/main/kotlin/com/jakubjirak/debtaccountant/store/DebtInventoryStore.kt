@@ -15,6 +15,12 @@ import java.io.File
 @Service(Service.Level.PROJECT)
 class DebtInventoryStore(private val project: Project) {
 
+    // Guards all access to [items]. Mutations are triggered from background tasks
+    // (scan import, SLA escalation) while reads happen on the EDT (tool window,
+    // status bar widget), so every read and write snapshots under this lock to
+    // avoid ConcurrentModificationException and torn reads. Listener callbacks
+    // run outside the lock so they can safely call back into the store.
+    private val lock = Any()
     private val items = mutableListOf<TechDebtItem>()
     private val gson: Gson = GsonBuilder().setPrettyPrinting().create()
     private val listeners = java.util.concurrent.CopyOnWriteArrayList<() -> Unit>()
@@ -27,85 +33,109 @@ class DebtInventoryStore(private val project: Project) {
         listeners.forEach { it() }
     }
 
-    fun getItems(): List<TechDebtItem> = items.toList()
+    fun getItems(): List<TechDebtItem> = synchronized(lock) { items.toList() }
 
-    fun getActiveItems(): List<TechDebtItem> = items.filter { !it.isResolved }
+    fun getActiveItems(): List<TechDebtItem> = synchronized(lock) { items.filter { !it.isResolved } }
 
-    fun getResolvedItems(): List<TechDebtItem> = items.filter { it.isResolved }
+    fun getResolvedItems(): List<TechDebtItem> = synchronized(lock) { items.filter { it.isResolved } }
 
-    fun getItemById(id: String): TechDebtItem? = items.find { it.id == id }
+    fun getItemById(id: String): TechDebtItem? = synchronized(lock) { items.find { it.id == id } }
 
     fun addItem(item: TechDebtItem): Boolean {
-        items.add(item)
-        save()
+        synchronized(lock) {
+            items.add(item)
+            persist()
+        }
         notifyListeners()
         return true
     }
 
     fun updateItem(item: TechDebtItem) {
-        val index = items.indexOfFirst { it.id == item.id }
-        if (index >= 0) {
-            items[index] = item
-            save()
-            notifyListeners()
+        val changed = synchronized(lock) {
+            val index = items.indexOfFirst { it.id == item.id }
+            if (index >= 0) {
+                items[index] = item
+                persist()
+                true
+            } else {
+                false
+            }
         }
+        if (changed) notifyListeners()
     }
 
     fun removeItem(id: String) {
-        items.removeIf { it.id == id }
-        save()
-        notifyListeners()
+        val changed = synchronized(lock) {
+            val removed = items.removeIf { it.id == id }
+            if (removed) persist()
+            removed
+        }
+        if (changed) notifyListeners()
     }
 
     fun resolveItem(id: String) {
-        val item = items.find { it.id == id } ?: return
-        val resolved = item.copy(resolved = true, resolvedAt = System.currentTimeMillis())
-        val index = items.indexOf(item)
-        if (index >= 0) {
-            items[index] = resolved
-            save()
-            notifyListeners()
+        val changed = synchronized(lock) {
+            val index = items.indexOfFirst { it.id == id }
+            if (index >= 0) {
+                items[index] = items[index].copy(resolved = true, resolvedAt = System.currentTimeMillis())
+                persist()
+                true
+            } else {
+                false
+            }
         }
+        if (changed) notifyListeners()
     }
 
     fun addWorkaroundLog(itemId: String, log: WorkaroundLog) {
-        val item = items.find { it.id == itemId } ?: return
-        item.workaroundLogs.add(log)
-        val updated = item.copy(updatedAt = System.currentTimeMillis())
-        val index = items.indexOf(item)
-        if (index >= 0) {
-            items[index] = updated
-            save()
-            notifyListeners()
+        val changed = synchronized(lock) {
+            val index = items.indexOfFirst { it.id == itemId }
+            if (index >= 0) {
+                val item = items[index]
+                item.workaroundLogs.add(log)
+                items[index] = item.copy(updatedAt = System.currentTimeMillis())
+                persist()
+                true
+            } else {
+                false
+            }
         }
+        if (changed) notifyListeners()
     }
 
     fun getItemsByCategory(category: DebtCategory): List<TechDebtItem> =
-        items.filter { it.category == category && !it.isResolved }
+        synchronized(lock) { items.filter { it.category == category && !it.isResolved } }
 
     fun getItemsByPriority(priority: DebtPriority): List<TechDebtItem> =
-        items.filter { it.priority == priority && !it.isResolved }
+        synchronized(lock) { items.filter { it.priority == priority && !it.isResolved } }
 
     fun getItemsByFile(filePath: String): List<TechDebtItem> =
-        items.filter { it.filePath == filePath && !it.isResolved }
+        synchronized(lock) { items.filter { it.filePath == filePath && !it.isResolved } }
 
     fun load() {
         val file = getInventoryFile()
         if (!file.exists()) return
 
-        try {
-            val json = file.readText()
-            val type = object : TypeToken<List<TechDebtItem>>() {}.type
-            val loaded: List<TechDebtItem> = gson.fromJson(json, type) ?: emptyList()
-            items.clear()
-            items.addAll(loaded)
-            notifyListeners()
-        } catch (e: Exception) {
-            LOG.warn("Failed to load debt inventory: ${e.message}", e)
+        val loadedOk = synchronized(lock) {
+            try {
+                val json = file.readText()
+                val type = object : TypeToken<List<TechDebtItem>>() {}.type
+                val loaded: List<TechDebtItem> = gson.fromJson(json, type) ?: emptyList()
+                items.clear()
+                items.addAll(loaded)
+                true
+            } catch (e: Exception) {
+                LOG.warn("Failed to load debt inventory: ${e.message}", e)
+                false
+            }
         }
+        if (loadedOk) notifyListeners()
     }
 
-    fun save() {
+    fun save(): Unit = synchronized(lock) { persist() }
+
+    /** Writes the current inventory to disk. Caller must hold [lock]. */
+    private fun persist() {
         try {
             val file = getInventoryFile()
             file.parentFile?.mkdirs()
@@ -120,9 +150,9 @@ class DebtInventoryStore(private val project: Project) {
         return File(basePath, ".tech-debt/inventory.json")
     }
 
-    fun getItemCount(): Int = items.size
+    fun getItemCount(): Int = synchronized(lock) { items.size }
 
-    fun getActiveItemCount(): Int = items.count { !it.isResolved }
+    fun getActiveItemCount(): Int = synchronized(lock) { items.count { !it.isResolved } }
 
     companion object {
         private val LOG = Logger.getInstance(DebtInventoryStore::class.java)

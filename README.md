@@ -1,27 +1,32 @@
 # Technical Debt Accountant
 
 [![Build](https://github.com/JirakJ/technical-debt-accountant/actions/workflows/build.yml/badge.svg)](https://github.com/JirakJ/technical-debt-accountant/actions/workflows/build.yml)
-[![Version](https://img.shields.io/badge/version-2026.2.1-blue.svg)](https://github.com/JirakJ/technical-debt-accountant/releases)
+[![Version](https://img.shields.io/badge/version-2026.7.0-blue.svg)](https://github.com/JirakJ/technical-debt-accountant/releases)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
 > Quantify your technical debt in dollars, track workaround costs, and prioritize refactoring by ROI — all inside your JetBrains IDE.
 
 ## 📸 Screenshots
 
-| Debt Inventory | TODO/FIXME Scanner |
+| Debt Health Score | TODO/FIXME Scanner |
 |---|---|
-| ![Tech Debt tool window](screenshots/tech-debt-tool-window.png) | ![Scan debt comments](screenshots/scan-debt-comments.png) |
+| ![Debt health score](screenshots/debt-health-score.png) | ![Scan debt comments](screenshots/scan-debt-comments.png) |
+
+| Debt Inventory | Add Debt at Cursor |
+|---|---|
+| ![Tech Debt tool window](screenshots/tech-debt-tool-window.png) | ![Add debt dialog](screenshots/add-debt-dialog.png) |
 
 | Management Report | Trend Forecast |
 |---|---|
 | ![Management report](screenshots/management-report.png) | ![Debt forecast](screenshots/debt-forecast.png) |
 
-| Add Debt at Cursor | CSV/JSON Export |
+| Management Report | CSV/JSON Export |
 |---|---|
-| ![Add debt dialog](screenshots/add-debt-dialog.png) | ![Export inventory](screenshots/export-inventory.png) |
+| ![Management report](screenshots/management-report.png) | ![Export inventory](screenshots/export-inventory.png) |
 
 ## ✨ Features
 
+- **Debt Health Score** — an at-a-glance **A–F grade** (0–100) summarising your codebase's debt pressure, shown in a clickable **status bar widget**, the Tech Debt tool window, and management reports. Set a **monthly debt budget** to get flagged when recurring interest exceeds it
 - **TODO/FIXME scanner** — `Tools → Scan TODO/FIXME Comments…` imports `TODO` / `FIXME` / `HACK` / `XXX` / `OPTIMIZE` comments as debt items with marker-based category and priority, deduplicated on re-scan; also available as a CLI (`DebtScanCli`) with `--fail-over=<n>` for CI gates
 - **CSV/JSON export** — `Tools → Export Debt Inventory…` exports the backlog with computed workaround and fix costs for Excel / Google Sheets or downstream tooling
 

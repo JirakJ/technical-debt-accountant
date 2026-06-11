@@ -50,7 +50,7 @@
   <text x="16" y="386" fill="#BBBBBB" font-size="13" font-weight="600">Tech Debt — Debt Inventory</text>
 
   <!-- summary row -->
-  <text x="16" y="424" fill="#BBBBBB" font-size="13">Active Items: <tspan font-weight="700" fill="#FFFFFF">12</tspan>   |   Total Workaround Cost: <tspan font-weight="700" fill="#73C991">$3,840.00</tspan>   |   Estimated Fix Cost: <tspan font-weight="700" fill="#E5C07B">$5,120.00</tspan></text>
+  <text x="16" y="424" fill="#BBBBBB" font-size="13">Health: <tspan font-weight="700" fill="#E5C07B">C (63/100)</tspan>   |   Active Items: <tspan font-weight="700" fill="#FFFFFF">12</tspan>   |   Total Workaround Cost: <tspan font-weight="700" fill="#73C991">$3,840.00</tspan>   |   Estimated Fix Cost: <tspan font-weight="700" fill="#E5C07B">$5,120.00</tspan></text>
 
   <!-- table header -->
   <rect x="16" y="438" width="1248" height="28" fill="#45494A"/>
@@ -147,4 +147,8 @@
   <!-- status bar -->
   <rect y="776" width="1280" height="24" fill="#3C3F41"/>
   <text x="16" y="792" fill="#808080" font-size="12">Technical Debt Accountant: 12 active items · $3,840 accumulated workaround cost</text>
+  <!-- Debt Health status bar widget -->
+  <rect x="1104" y="780" width="160" height="16" rx="3" fill="#45494A"/>
+  <text x="1116" y="792" fill="#E5C07B" font-size="12" font-weight="600">Debt C</text>
+  <text x="1166" y="792" fill="#BBBBBB" font-size="12">· $640.00/mo</text>
 </svg>

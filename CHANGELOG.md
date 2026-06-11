@@ -1,5 +1,36 @@
 # Changelog
 
+## [2026.7.0] - 2026-06-11
+
+### Added
+- **Debt Health Score** — a 0–100 score with an **A–F letter grade** that
+  summarises the project's debt pressure at a glance. The score uses exponential
+  decay over weighted priority severity, so it is bounded (0–100), can't be gamed
+  negative, and stays comparable across projects. Surfaced in the Tech Debt tool
+  window summary, in management reports (Executive Summary), and in a new status
+  bar widget.
+- **Debt Health status bar widget** — shows `Debt <grade> · <monthly interest>/mo`
+  with a detailed tooltip (score, active items, monthly interest, budget status);
+  click it to open the Tech Debt tool window. Refreshes automatically as the
+  inventory changes.
+- **Monthly debt budget** — new setting (`Settings → Tools → Technical Debt
+  Accountant`); when set, the tool window and status bar flag the project as
+  **over budget** once recurring monthly interest exceeds the threshold.
+- 18 new unit tests covering grade thresholds/boundaries, score monotonicity and
+  clamping, priority weighting, budget flag logic, and status bar text/tooltip
+  formatting. Suite total: 238 tests, all green.
+
+### Fixed
+- **Thread-safety** — `DebtInventoryStore` now guards all reads and writes of the
+  inventory with a lock, eliminating a `ConcurrentModificationException` risk when
+  background tasks (scan import, SLA escalation) mutate the inventory while the EDT
+  (tool window, status bar) reads it. Listener callbacks run outside the lock.
+
+### Changed
+- Refreshed the plugin icon (light + dark) to a cleaner, higher-contrast ledger mark.
+- Build now provisions the JDK 17 toolchain via the Foojay resolver, so the project
+  builds on machines without a pre-installed JDK 17.
+
 ## [2026.6.0] - 2026-06-09
 
 ### Added
