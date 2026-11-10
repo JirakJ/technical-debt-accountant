@@ -16,7 +16,6 @@ class DebtAccountantSettings : PersistentStateComponent<DebtAccountantSettings.S
         var currency: String = "USD",
         var inventoryPath: String = ".tech-debt",
         var autoDetectEnabled: Boolean = true,
-        var maxFreeItems: Int = 50,
         var showGutterIcons: Boolean = true,
         var debtBudgetDollars: Double = 0.0
     )
@@ -44,10 +43,6 @@ class DebtAccountantSettings : PersistentStateComponent<DebtAccountantSettings.S
     var autoDetectEnabled: Boolean
         get() = state.autoDetectEnabled
         set(value) { state.autoDetectEnabled = value }
-
-    var maxFreeItems: Int
-        get() = state.maxFreeItems
-        set(value) { state.maxFreeItems = value }
 
     var showGutterIcons: Boolean
         get() = state.showGutterIcons

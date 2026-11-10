@@ -24,45 +24,15 @@ Every developer knows technical debt exists. The problem is <em>proving it</em> 
   <li><strong>Git Blame Integration</strong> — Track when debt was introduced and by whom. See debt age and origin at a glance.</li>
   <li><strong>Gutter Icons</strong> — Visual markers in the editor gutter with debt tooltips — see debt context without leaving your code.</li>
   <li><strong>Git-Tracked Storage</strong> — Debt data lives in <code>.tech-debt/inventory.json</code>, committed to your repo so the whole team shares one source of truth.</li>
-  <li><strong>Dollar Valuation</strong> — Convert workaround time to dollars using configurable hourly rates. See the real cost of living with debt. <em>(Pro)</em></li>
-  <li><strong>Monthly Interest Calculation</strong> — Calculate the recurring monthly cost of each debt item based on accumulated workaround data. <em>(Pro)</em></li>
-  <li><strong>ROI Calculator</strong> — Estimate fix cost, compare to ongoing workaround expense, and calculate breakeven period. Data-driven refactoring prioritization. <em>(Pro)</em></li>
-  <li><strong>Burndown Charts</strong> — Visualize debt reduction over time. Track progress and celebrate wins. <em>(Pro)</em></li>
-  <li><strong>Management Reports</strong> — Export polished Markdown reports with dollar figures, ROI analysis, and prioritized recommendations — ready for stakeholder meetings. <em>(Pro)</em></li>
-  <li><strong>Team Aggregation</strong> — Aggregate debt data across developers and projects for organization-wide visibility. <em>(Enterprise)</em></li>
-  <li><strong>JIRA Integration</strong> — Link debt items to JIRA tickets for seamless workflow integration. <em>(Enterprise)</em></li>
-  <li><strong>Long-Term Trend Analytics</strong> — Track debt trends over months and quarters to measure improvement. <em>(Enterprise)</em></li>
+  <li><strong>Dollar Valuation</strong> — Convert workaround time to dollars using configurable hourly rates. See the real cost of living with debt.</li>
+  <li><strong>Monthly Interest Calculation</strong> — Calculate the recurring monthly cost of each debt item based on accumulated workaround data.</li>
+  <li><strong>ROI Calculator</strong> — Estimate fix cost, compare to ongoing workaround expense, and calculate breakeven period. Data-driven refactoring prioritization.</li>
+  <li><strong>Burndown Charts</strong> — Visualize debt reduction over time. Track progress and celebrate wins.</li>
+  <li><strong>Management Reports</strong> — Export polished Markdown reports with dollar figures, ROI analysis, and prioritized recommendations — ready for stakeholder meetings.</li>
 </ul>
 
-<h3>Free Tier</h3>
-<p>Start tracking debt at no cost with up to <strong>50 debt items</strong> per project:</p>
-<ul>
-  <li>Debt inventory with 9 categories and 4 priority levels</li>
-  <li>Quick-add with <kbd>Alt</kbd>+<kbd>D</kbd></li>
-  <li>Workaround timer (manual + stopwatch)</li>
-  <li>Hotspot detection</li>
-  <li>Git blame integration (debt origin and age)</li>
-  <li>Gutter icons with tooltips</li>
-  <li>Git-tracked storage (<code>.tech-debt/inventory.json</code>)</li>
-</ul>
-
-<h3>Pro Tier — $8/month (or $79/year)</h3>
-<ul>
-  <li><strong>Unlimited debt items</strong></li>
-  <li>Dollar valuation with configurable hourly rates</li>
-  <li>Monthly interest calculation (recurring workaround costs)</li>
-  <li>ROI calculator with breakeven analysis</li>
-  <li>Burndown chart visualization</li>
-  <li>Management-ready Markdown report export</li>
-</ul>
-
-<h3>Enterprise Tier — $15/dev/month</h3>
-<ul>
-  <li>Everything in Pro</li>
-  <li>Team aggregation across developers and projects</li>
-  <li>JIRA ticket linking</li>
-  <li>Long-term trend analytics (monthly/quarterly)</li>
-</ul>
+<h3>Free &amp; Open Source</h3>
+<p>Every feature is free for everyone — no license, no item limits. The source code is available under the Apache-2.0 license at <a href="https://github.com/JirakJ/technical-debt-accountant">github.com/JirakJ/technical-debt-accountant</a>. Issues and pull requests are welcome.</p>
 
 <h3>Getting Started</h3>
 <ol>
@@ -84,11 +54,7 @@ technical-debt, code-quality, refactoring, roi, developer-tools
 Code Quality
 
 ## Pricing
-| Tier | Price | Features |
-|------|-------|----------|
-| Free | $0 | Up to 50 items, debt inventory, workaround timer, hotspot detection, git blame, gutter icons, git-tracked storage |
-| Pro | $8/month or $79/year | Unlimited items, dollar valuation, monthly interest, ROI calculator, burndown charts, management reports |
-| Enterprise | $15/dev/month | Team aggregation, JIRA integration, long-term trend analytics |
+Free & open source (Apache-2.0). All features are available to everyone.
 
 ## Screenshots Needed
 1. **Debt Inventory** — Tech Debt tool window showing cataloged debt items with categories, priorities, dollar costs, and hotspot indicators.
