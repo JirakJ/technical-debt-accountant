@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2026 Jakub Jirák. All rights reserved.
- * Licensed under the terms of the JetBrains Marketplace EULA.
+ * Copyright 2026 Jakub Jirák
+ * SPDX-License-Identifier: Apache-2.0
  */
 package com.jakubjirak.debtaccountant.feedback
 
