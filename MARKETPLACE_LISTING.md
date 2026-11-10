@@ -53,36 +53,24 @@ Links debt items to commits and tracks file authors. Data stored in `.tech-debt/
 #### 🎯 Gutter Icons
 Priority-colored markers in the editor gutter with debt tooltips for instant visual feedback.
 
-#### 💰 Dollar Valuation *(Pro)*
+#### 💰 Dollar Valuation
 Converts workaround time to cost using a configurable hourly rate. See total workaround cost, estimated fix cost, and monthly interest for every debt item.
 
-#### 📊 ROI Calculator *(Pro)*
+#### 📊 ROI Calculator
 Calculates breakeven months (`fix cost ÷ monthly interest`) and prioritizes debt items by ROI — fix the items that pay for themselves fastest.
 
-#### 📉 Burndown Chart *(Pro)*
+#### 📉 Burndown Chart
 Tracks debt resolution trends over time with status indicators: IMPROVING, STABLE, or WORSENING.
 
-#### 📄 Management Export *(Pro)*
+#### 📄 Management Export
 Generates Markdown reports with executive summary, priority/category breakdown, top 5 hotspots, and top 5 ROI opportunities. Copied to clipboard for Slack, email, or docs.
-
-#### 👥 Team Aggregation *(Enterprise)*
-Aggregate debt metrics across team members and projects for organization-wide visibility.
-
-#### 🔗 JIRA Integration *(Enterprise)*
-Link debt items to JIRA tickets for project management alignment.
-
-#### 📈 Trend Analytics *(Enterprise)*
-Long-term debt trend analysis across the organization.
 
 ---
 
 ### 💰 Pricing Model
 
-| Tier | Price | Highlights |
-|------|-------|------------|
-| **Free** | $0 | Up to 50 debt items, 9 categories, 4 priorities, workaround timer, hotspot detection, Git integration, gutter icons, Tech Debt tool window |
-| **Pro** | $8/month or $79/year | Unlimited debt items, dollar valuation, monthly interest calculation, ROI calculator, burndown chart, management export, CSV export |
-| **Enterprise** | $15/dev/month | All Pro features + team aggregation, JIRA integration, trend analytics |
+Free & open source (Apache-2.0) — every feature is available to everyone, no license needed.
+
 
 ---
 
@@ -113,7 +101,7 @@ Long-term debt trend analysis across the organization.
 3. **Log debt** — Place cursor on problematic code → Press **Alt+D** → Fill in category, priority, description
 4. **Track workarounds** — Tools → Log Workaround Time → Select debt item → Enter minutes spent
 5. **View inventory** — Open the **Tech Debt** tool window (bottom panel)
-6. **Generate report** *(Pro)* — Tools → Generate Debt Report → Paste into Slack/email/docs
+6. **Generate report** — Tools → Generate Debt Report → Paste into Slack/email/docs
 
 ---
 
@@ -127,8 +115,8 @@ Available in [`screenshots/`](screenshots/) at 1280×800:
 | 2 | `tech-debt-tool-window.png` | Tech Debt tool window with debt inventory table, health grade + dollar summary, and priority-colored gutter icons in the editor |
 | 3 | `scan-debt-comments.png` | TODO/FIXME/HACK/XXX/OPTIMIZE comment scan preview with marker→category/priority mapping |
 | 4 | `add-debt-dialog.png` | Add Debt Item dialog (Alt+D) with category, priority, description, and estimated fix time fields |
-| 5 | `management-report.png` | Generated executive report with summary, hotspots, and ROI opportunities (Pro) |
-| 6 | `debt-forecast.png` | Debt trend forecast with burndown projection and 95% confidence band (Pro) |
+| 5 | `management-report.png` | Generated executive report with summary, hotspots, and ROI opportunities |
+| 6 | `debt-forecast.png` | Debt trend forecast with burndown projection and 95% confidence band |
 | 7 | `export-inventory.png` | CSV/JSON export with computed workaround and fix costs |
 
 ---
@@ -188,8 +176,6 @@ Available in [`screenshots/`](screenshots/) at 1280×800:
 - [ ] Plugin description under 255 characters for short description field
 - [ ] Full description formatted in HTML for Marketplace submission
 - [ ] Screenshots captured at 1280×800 minimum resolution
-- [ ] Pricing tiers configured in JetBrains Marketplace vendor portal
-- [ ] License agreement uploaded
 - [ ] Plugin JAR/ZIP tested on IntelliJ IDEA 2024.3 (build 232)
 - [ ] Plugin JAR/ZIP tested on latest IntelliJ IDEA version
 - [ ] Change notes prepared for current version

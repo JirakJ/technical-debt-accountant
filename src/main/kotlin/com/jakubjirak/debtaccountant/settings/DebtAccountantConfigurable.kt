@@ -71,14 +71,6 @@ class DebtAccountantConfigurable : BoundConfigurable("Technical Debt Accountant"
                     )
                     .comment("Display icons in the editor gutter for debt items")
             }
-            row("Max free items:") {
-                spinner(1..1000, 1)
-                    .bindIntValue(
-                        { settings.maxFreeItems },
-                        { settings.maxFreeItems = it }
-                    )
-                    .comment("Maximum number of items shown before requiring action")
-            }
         }
     }
 }
