@@ -92,11 +92,16 @@ class SlaPolicyValidationTest {
     @Test
     fun `ruleFor returns matching rule or default`() {
         val policy = SlaPolicy.DEFAULT
-        assertEquals(DebtPriority.HIGH, policy.ruleFor(DebtPriority.HIGH).priority)
-        assertEquals(policy.defaultRule, policy.ruleFor(DebtPriority.entries.first()).let {
-            // For a priority in rules, should NOT be defaultRule
-            if (it.priority == policy.defaultRule.priority && policy.rules.none { r -> r.priority == DebtPriority.entries.first() }) it else policy.defaultRule
-        }.let { policy.defaultRule })
+        assertEquals(30, policy.ruleFor(DebtPriority.HIGH).maxAgeDays)
+        assertEquals(7, policy.ruleFor(DebtPriority.CRITICAL).maxAgeDays)
+
+        val onlyHigh = SlaPolicy(
+            rules = listOf(SlaRule(DebtPriority.HIGH, maxAgeDays = 10)),
+            defaultRule = SlaRule(DebtPriority.LOW, maxAgeDays = 99),
+        )
+        assertEquals(10, onlyHigh.ruleFor(DebtPriority.HIGH).maxAgeDays)
+        assertEquals(onlyHigh.defaultRule, onlyHigh.ruleFor(DebtPriority.MEDIUM))
+        assertEquals(onlyHigh.defaultRule, onlyHigh.ruleFor(DebtPriority.CRITICAL))
         assertFalse(policy.validate().isNotEmpty())
     }
 }

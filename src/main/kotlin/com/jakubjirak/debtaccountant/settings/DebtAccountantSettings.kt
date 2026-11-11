@@ -14,9 +14,6 @@ class DebtAccountantSettings : PersistentStateComponent<DebtAccountantSettings.S
     data class State(
         var hourlyRate: Double = 80.0,
         var currency: String = "USD",
-        var inventoryPath: String = ".tech-debt",
-        var autoDetectEnabled: Boolean = true,
-        var showGutterIcons: Boolean = true,
         var debtBudgetDollars: Double = 0.0
     )
 
@@ -35,18 +32,6 @@ class DebtAccountantSettings : PersistentStateComponent<DebtAccountantSettings.S
     var currency: String
         get() = state.currency
         set(value) { state.currency = value }
-
-    var inventoryPath: String
-        get() = state.inventoryPath
-        set(value) { state.inventoryPath = value }
-
-    var autoDetectEnabled: Boolean
-        get() = state.autoDetectEnabled
-        set(value) { state.autoDetectEnabled = value }
-
-    var showGutterIcons: Boolean
-        get() = state.showGutterIcons
-        set(value) { state.showGutterIcons = value }
 
     /** Monthly debt-interest budget in [currency]; `0.0` disables budget checks. */
     var debtBudgetDollars: Double

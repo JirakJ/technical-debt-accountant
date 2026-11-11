@@ -46,49 +46,18 @@ class DebtForecaster(
 
         val direction = classify(linearCount.slope)
 
-        val lastX = xs.last()
-        val projections = ArrayList<WeeklyProjection>(horizonWeeks)
-        for (w in 1..horizonWeeks) {
-            val x = lastX + w
-            val predictedCount = when (chosen) {
-                ForecastModel.LINEAR -> linearCount.predict(x)
-                ForecastModel.EXPONENTIAL -> expCount.predict(x)
-                ForecastModel.AUTO -> error("AUTO should have been resolved")
-            }
-            // 95% CI uses ~1.96 * stdErr around the linear fit. For exponential,
-            // we widen symmetrically in log-space; here we fall back to linear CI
-            // as a conservative approximation — good enough for executive charts.
-            val ci = CI95 * linearCount.stdErr
-            val predictedDollars = linearDollars.predict(x)
-            projections += WeeklyProjection(
-                weekIndex = w,
-                predictedCount = predictedCount,
-                predictedCountLow = predictedCount - ci,
-                predictedCountHigh = predictedCount + ci,
-                predictedDollars = predictedDollars
-            )
+        val predictCount: (Double) -> Double = when (chosen) {
+            ForecastModel.EXPONENTIAL -> expCount::predict
+            else -> linearCount::predict
         }
-
-        val burndownWeeks = if (linearCount.slope < 0) {
-            // count = slope * x + intercept; solve count = 0 → x = -intercept/slope
-            -linearCount.intercept / linearCount.slope
-        } else Double.NaN
-        val burndownDate: Instant? = if (burndownWeeks.isFinite() && burndownWeeks > 0) {
-            Instant.ofEpochMilli(origin + (burndownWeeks * WEEK_MILLIS).toLong())
-        } else null
-
+        // 95% CI uses ~1.96 * stdErr around the linear fit. For exponential,
+        // we widen symmetrically in log-space; here we fall back to linear CI
+        // as a conservative approximation — good enough for executive charts.
+        val ci = CI95 * linearCount.stdErr
+        val projections = project(xs.last(), horizonWeeks, predictCount, ci, linearDollars::predict)
+        val burndownDate = burndownDate(linearCount, origin)
         val wowDelta = wowDelta(sorted, last.timestamp)
-
-        val priorityTrends = DebtPriority.entries.associateWith { p ->
-            val ys = DoubleArray(sorted.size) { i -> (sorted[i].byPriority[p] ?: 0).toDouble() }
-            val fit = LinearRegression.fit(xs, ys)
-            PriorityTrend(
-                priority = p,
-                currentCount = last.byPriority[p] ?: 0,
-                slopePerWeek = fit.slope,
-                direction = classify(fit.slope)
-            )
-        }
+        val priorityTrends = priorityTrends(sorted, xs)
 
         return DebtForecast(
             generatedAt = Instant.ofEpochMilli(last.timestamp),
@@ -112,6 +81,45 @@ class DebtForecaster(
         )
     }
 
+    private fun project(
+        lastX: Double,
+        horizonWeeks: Int,
+        predictCount: (Double) -> Double,
+        ciHalfWidth: Double,
+        predictDollars: (Double) -> Double,
+    ): List<WeeklyProjection> = (1..horizonWeeks).map { w ->
+        val x = lastX + w
+        val predictedCount = predictCount(x)
+        WeeklyProjection(
+            weekIndex = w,
+            predictedCount = predictedCount,
+            predictedCountLow = predictedCount - ciHalfWidth,
+            predictedCountHigh = predictedCount + ciHalfWidth,
+            predictedDollars = predictDollars(x)
+        )
+    }
+
+    private fun burndownDate(linearCount: LinearRegressionResult, origin: Long): Instant? {
+        if (linearCount.slope >= 0) return null
+        // count = slope * x + intercept; solve count = 0 → x = -intercept/slope
+        val burndownWeeks = -linearCount.intercept / linearCount.slope
+        if (!burndownWeeks.isFinite() || burndownWeeks <= 0) return null
+        return Instant.ofEpochMilli(origin + (burndownWeeks * WEEK_MILLIS).toLong())
+    }
+
+    private fun priorityTrends(sorted: List<TimeSeriesPoint>, xs: DoubleArray): Map<DebtPriority, PriorityTrend> {
+        val last = sorted.last()
+        return DebtPriority.entries.associateWith { p ->
+            val ys = DoubleArray(sorted.size) { i -> (sorted[i].byPriority[p] ?: 0).toDouble() }
+            val fit = LinearRegression.fit(xs, ys)
+            PriorityTrend(
+                priority = p,
+                currentCount = last.byPriority[p] ?: 0,
+                slopePerWeek = fit.slope,
+                direction = classify(fit.slope)
+            )
+        }
+    }
     private fun chooseModel(
         requested: ForecastModel,
         linear: LinearRegressionResult,

@@ -22,3 +22,7 @@ Thumbs.db
 
 # Plugin build
 /sandbox/
+
+# Local secrets / Kotlin caches
+.env
+.kotlin/

@@ -6,8 +6,6 @@ import com.google.gson.reflect.TypeToken
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.project.Project
-import com.jakubjirak.debtaccountant.model.DebtCategory
-import com.jakubjirak.debtaccountant.model.DebtPriority
 import com.jakubjirak.debtaccountant.model.TechDebtItem
 import com.jakubjirak.debtaccountant.model.WorkaroundLog
 import java.io.File
@@ -37,8 +35,6 @@ class DebtInventoryStore(private val project: Project) {
 
     fun getActiveItems(): List<TechDebtItem> = synchronized(lock) { items.filter { !it.isResolved } }
 
-    fun getResolvedItems(): List<TechDebtItem> = synchronized(lock) { items.filter { it.isResolved } }
-
     fun getItemById(id: String): TechDebtItem? = synchronized(lock) { items.find { it.id == id } }
 
     fun addItem(item: TechDebtItem): Boolean {
@@ -60,15 +56,6 @@ class DebtInventoryStore(private val project: Project) {
             } else {
                 false
             }
-        }
-        if (changed) notifyListeners()
-    }
-
-    fun removeItem(id: String) {
-        val changed = synchronized(lock) {
-            val removed = items.removeIf { it.id == id }
-            if (removed) persist()
-            removed
         }
         if (changed) notifyListeners()
     }
@@ -103,15 +90,6 @@ class DebtInventoryStore(private val project: Project) {
         if (changed) notifyListeners()
     }
 
-    fun getItemsByCategory(category: DebtCategory): List<TechDebtItem> =
-        synchronized(lock) { items.filter { it.category == category && !it.isResolved } }
-
-    fun getItemsByPriority(priority: DebtPriority): List<TechDebtItem> =
-        synchronized(lock) { items.filter { it.priority == priority && !it.isResolved } }
-
-    fun getItemsByFile(filePath: String): List<TechDebtItem> =
-        synchronized(lock) { items.filter { it.filePath == filePath && !it.isResolved } }
-
     fun load() {
         val file = getInventoryFile()
         if (!file.exists()) return
@@ -132,8 +110,6 @@ class DebtInventoryStore(private val project: Project) {
         if (loadedOk) notifyListeners()
     }
 
-    fun save(): Unit = synchronized(lock) { persist() }
-
     /** Writes the current inventory to disk. Caller must hold [lock]. */
     private fun persist() {
         try {
@@ -151,8 +127,6 @@ class DebtInventoryStore(private val project: Project) {
     }
 
     fun getItemCount(): Int = synchronized(lock) { items.size }
-
-    fun getActiveItemCount(): Int = synchronized(lock) { items.count { !it.isResolved } }
 
     companion object {
         private val LOG = Logger.getInstance(DebtInventoryStore::class.java)

@@ -7,12 +7,19 @@ import java.text.NumberFormat
 import java.util.Currency
 import java.util.Locale
 
-class DollarValuator {
+/**
+ * Converts debt items into money. The hourly rate, currency and clock are injectable so
+ * the arithmetic can be unit-tested; by default they come from [DebtAccountantSettings].
+ */
+class DollarValuator(
+    private val hourlyRateProvider: () -> Double = { DebtAccountantSettings.getInstance().hourlyRate },
+    private val currencyProvider: () -> String = { DebtAccountantSettings.getInstance().currency },
+    private val clock: () -> Long = System::currentTimeMillis,
+) {
 
     fun valuate(item: TechDebtItem): DebtValuation {
-        val settings = DebtAccountantSettings.getInstance()
-        val hourlyRate = settings.hourlyRate
-        val currency = settings.currency
+        val hourlyRate = hourlyRateProvider()
+        val currency = currencyProvider()
 
         val workaroundCost = item.totalWorkaroundMinutes * (hourlyRate / 60.0)
         val fixCost = item.estimatedFixMinutes * (hourlyRate / 60.0)
@@ -34,18 +41,18 @@ class DollarValuator {
         items.map { valuate(it) }
 
     fun totalWorkaroundCost(items: List<TechDebtItem>): Double {
-        val hourlyRate = DebtAccountantSettings.getInstance().hourlyRate
+        val hourlyRate = hourlyRateProvider()
         return items.sumOf { it.totalWorkaroundMinutes * (hourlyRate / 60.0) }
     }
 
     fun totalFixCost(items: List<TechDebtItem>): Double {
-        val hourlyRate = DebtAccountantSettings.getInstance().hourlyRate
+        val hourlyRate = hourlyRateProvider()
         return items.sumOf { it.estimatedFixMinutes * (hourlyRate / 60.0) }
     }
 
     /** Sum of recurring monthly interest (last-30-day workaround cost) across [items]. */
     fun totalMonthlyInterest(items: List<TechDebtItem>): Double {
-        val hourlyRate = DebtAccountantSettings.getInstance().hourlyRate
+        val hourlyRate = hourlyRateProvider()
         return items.sumOf { calculateMonthlyInterest(it, hourlyRate) }
     }
 
@@ -62,8 +69,7 @@ class DollarValuator {
     private fun calculateMonthlyInterest(item: TechDebtItem, hourlyRate: Double): Double {
         if (item.workaroundLogs.isEmpty()) return 0.0
 
-        val now = System.currentTimeMillis()
-        val thirtyDaysAgo = now - 30L * 24 * 60 * 60 * 1000
+        val thirtyDaysAgo = clock() - THIRTY_DAYS_MILLIS
         val recentLogs = item.workaroundLogs.filter { it.timestamp >= thirtyDaysAgo }
         val recentMinutes = recentLogs.sumOf { it.durationMinutes }
 
@@ -78,5 +84,9 @@ class DollarValuator {
             "CZK" -> Locale.forLanguageTag("cs-CZ")
             else -> Locale.US
         }
+    }
+
+    private companion object {
+        const val THIRTY_DAYS_MILLIS = 30L * 24 * 60 * 60 * 1000
     }
 }
