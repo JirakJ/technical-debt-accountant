@@ -5,8 +5,6 @@ gson = "2.11.0"
 junit = "5.11.4"
 detekt = "1.23.7"
 
-proguard = "7.6.1"
-
 [libraries]
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 junit-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
