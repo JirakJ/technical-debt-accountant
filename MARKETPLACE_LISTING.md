@@ -16,7 +16,7 @@
 
 ## 🎯 Short Description
 
-> Quantify technical debt in dollars, track workaround costs with timers, calculate ROI for refactoring, and generate executive reports — all inside your JetBrains IDE.
+> Quantify technical debt in dollars, track workaround costs, calculate ROI for refactoring, and generate executive reports — all inside your JetBrains IDE.
 
 ---
 
@@ -41,17 +41,14 @@ Code Smell, Missing Tests, Outdated Dependency, Security Vulnerability, Performa
 #### ⚖️ 4 Priority Levels
 Critical (4× weight), High (3×), Medium (2×), Low (1×) — priority multipliers ensure the worst debt surfaces first.
 
-#### ⏱️ Workaround Timer
-Start/stop a timer or manually log workaround minutes with notes. Every minute spent working around debt is tracked and converted to cost.
+#### ⏱️ Workaround Logging
+Log workaround minutes with an optional note. Every minute spent working around debt is tracked and converted to cost.
 
 #### 🔥 Hotspot Detection
 Identifies files with the most concentrated debt by weighted score: `(priority.weight × 10) + (workaroundMinutes × 0.5)`. View the top 10 hotspots in the Tech Debt tool window.
 
-#### 🔗 Git Integration
-Links debt items to commits and tracks file authors. Data stored in `.tech-debt/inventory.json` — fully Git-trackable.
-
-#### 🎯 Gutter Icons
-Priority-colored markers in the editor gutter with debt tooltips for instant visual feedback.
+#### 🗂️ Git-Trackable Storage
+Data is stored in `.tech-debt/inventory.json` under the project root — commit it alongside your code.
 
 #### 💰 Dollar Valuation
 Converts workaround time to cost using a configurable hourly rate. See total workaround cost, estimated fix cost, and monthly interest for every debt item.
@@ -59,8 +56,8 @@ Converts workaround time to cost using a configurable hourly rate. See total wor
 #### 📊 ROI Calculator
 Calculates breakeven months (`fix cost ÷ monthly interest`) and prioritizes debt items by ROI — fix the items that pay for themselves fastest.
 
-#### 📉 Burndown Chart
-Tracks debt resolution trends over time with status indicators: IMPROVING, STABLE, or WORSENING.
+#### 📉 Trend Forecast
+Projects debt count, dollars and an estimated burndown date (with a 95% confidence band) from weekly digest snapshots.
 
 #### 📄 Management Export
 Generates Markdown reports with executive summary, priority/category breakdown, top 5 hotspots, and top 5 ROI opportunities. Copied to clipboard for Slack, email, or docs.
@@ -88,9 +85,7 @@ Free & open source (Apache-2.0) — every feature is available to everyone, no l
 
 | Requirement | Value |
 |-------------|-------|
-| **IDE Version** | IntelliJ IDEA 2024.3+ (build 232+) |
-| **Java** | 17+ |
-| **Optional** | Git4Idea plugin (for Git integration features) |
+| **IDE Version** | IntelliJ IDEA 2025.1+ (build 251+) |
 
 ---
 
@@ -112,7 +107,7 @@ Available in [`screenshots/`](screenshots/) at 1280×800:
 | # | Screenshot | Description |
 |---|-----------|-------------|
 | 1 | `debt-health-score.png` | Debt Health Score — A–F grade with gauge, monthly interest, budget status, and the status bar widget |
-| 2 | `tech-debt-tool-window.png` | Tech Debt tool window with debt inventory table, health grade + dollar summary, and priority-colored gutter icons in the editor |
+| 2 | `tech-debt-tool-window.png` | Tech Debt tool window with debt inventory table, health grade + dollar summary |
 | 3 | `scan-debt-comments.png` | TODO/FIXME/HACK/XXX/OPTIMIZE comment scan preview with marker→category/priority mapping |
 | 4 | `add-debt-dialog.png` | Add Debt Item dialog (Alt+D) with category, priority, description, and estimated fix time fields |
 | 5 | `management-report.png` | Generated executive report with summary, hotspots, and ROI opportunities |

@@ -42,11 +42,15 @@ class LogWorkaroundAction : AnAction() {
             "Note (optional):", noteField
         )
         val result = JOptionPane.showConfirmDialog(null, fields, "Log Workaround", JOptionPane.OK_CANCEL_OPTION)
-        if (result == JOptionPane.OK_OPTION) {
-            val minutes = minutesField.text.toIntOrNull() ?: 15
-            val note = noteField.text
-            WorkaroundTracker.getInstance(project).logManual(itemId, minutes, note)
+        if (result != JOptionPane.OK_OPTION) return
+        val minutes = minutesField.text.trim().toIntOrNull()
+        if (minutes == null || minutes <= 0) {
+            JOptionPane.showMessageDialog(
+                null, "Minutes must be a positive whole number.", "Invalid Input", JOptionPane.ERROR_MESSAGE
+            )
+            return
         }
+        WorkaroundTracker.getInstance(project).logManual(itemId, minutes, noteField.text)
     }
 
     override fun update(e: AnActionEvent) {

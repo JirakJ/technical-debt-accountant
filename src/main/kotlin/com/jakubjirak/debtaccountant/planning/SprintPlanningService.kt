@@ -118,17 +118,18 @@ class SprintPlanningService {
 
         for (item in items) {
             val hours = item.estimatedFixMinutes / 60.0
-            if (item.estimatedFixMinutes <= 0) {
-                declined += DeclinedItem(item, DeclineReason.NO_EFFORT, hours, 0.0, 0.0)
-                continue
+            when {
+                item.estimatedFixMinutes <= 0 ->
+                    declined += DeclinedItem(item, DeclineReason.NO_EFFORT, hours, 0.0, 0.0)
+                !passesFilters(item, options) -> {
+                    val dollars = safeValuate(options.valuator, item)
+                    declined += DeclinedItem(item, DeclineReason.FILTERED, hours, dollars, roi(dollars, hours))
+                }
+                else -> {
+                    val dollars = safeValuate(options.valuator, item)
+                    eligible += SprintRecommendation(item, hours, dollars, roi(dollars, hours))
+                }
             }
-            if (!passesFilters(item, options)) {
-                val dollars = safeValuate(options.valuator, item)
-                declined += DeclinedItem(item, DeclineReason.FILTERED, hours, dollars, roi(dollars, hours))
-                continue
-            }
-            val dollars = safeValuate(options.valuator, item)
-            eligible += SprintRecommendation(item, hours, dollars, roi(dollars, hours))
         }
 
         val sorted = eligible.sortedWith(RECOMMENDATION_ORDER)

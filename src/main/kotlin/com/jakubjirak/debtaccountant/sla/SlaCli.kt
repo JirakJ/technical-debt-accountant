@@ -7,6 +7,12 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 import java.time.Instant
+import com.jakubjirak.debtaccountant.cli.CliAbort
+import com.jakubjirak.debtaccountant.cli.cliAttempt
+import com.jakubjirak.debtaccountant.cli.cliFail
+import com.jakubjirak.debtaccountant.cli.cliHelp
+import com.jakubjirak.debtaccountant.cli.cliValue
+import com.jakubjirak.debtaccountant.cli.isHelpArg
 import kotlin.system.exitProcess
 
 /**
@@ -38,50 +44,62 @@ object SlaCli {
     }
 
     /** Testable entry point: parses args, runs evaluation, returns a [Result]. */
-    fun run(args: Array<String>, now: Instant = Instant.now()): Result {
+    fun run(args: Array<String>, now: Instant = Instant.now()): Result = try {
+        execute(parseArgs(args), now)
+    } catch (abort: CliAbort) {
+        Result(abort.exitCode, abort.stdout, abort.stderr)
+    }
+
+    private data class Options(
+        val inventoryPath: String,
+        val policyPath: String?,
+        val output: String,
+        val failOnBreach: Boolean,
+    )
+
+    private fun parseArgs(args: Array<String>): Options {
         var inventoryPath: String? = null
         var policyPath: String? = null
         var output = "md"
         var failOnBreach = false
         for (raw in args) {
             when {
-                raw.startsWith("--inventory=") -> inventoryPath = raw.substringAfter('=')
-                raw.startsWith("--policy=") -> policyPath = raw.substringAfter('=')
-                raw.startsWith("--output=") -> output = raw.substringAfter('=')
+                raw.startsWith("--inventory=") -> inventoryPath = raw.cliValue()
+                raw.startsWith("--policy=") -> policyPath = raw.cliValue()
+                raw.startsWith("--output=") -> output = raw.cliValue()
                 raw == "--fail-on-breach" -> failOnBreach = true
-                raw == "--help" || raw == "-h" -> return Result(0, HELP, "")
-                else -> return Result(1, "", "Unknown argument: $raw\n$HELP")
+                isHelpArg(raw) -> cliHelp(HELP)
+                else -> cliFail("Unknown argument: $raw\n$HELP")
             }
         }
-        if (inventoryPath == null) {
-            return Result(1, "", "Missing required --inventory=<path>\n$HELP")
-        }
-        if (output != "md" && output != "json") {
-            return Result(1, "", "--output must be 'md' or 'json' (was '$output')\n")
-        }
+        if (inventoryPath == null) cliFail("Missing required --inventory=<path>\n$HELP")
+        if (output != "md" && output != "json") cliFail("--output must be 'md' or 'json' (was '$output')\n")
+        return Options(inventoryPath, policyPath, output, failOnBreach)
+    }
 
-        val items = try {
-            readInventory(Paths.get(inventoryPath))
-        } catch (e: Exception) {
-            return Result(1, "", "Failed to read inventory: ${e.message}\n")
-        }
+    private fun loadPolicy(policyPath: String?): SlaPolicy {
+        if (policyPath == null) return SlaPolicy.DEFAULT
+        val p = Paths.get(policyPath)
+        if (!Files.exists(p)) cliFail("Policy file not found: $policyPath\n")
+        return cliAttempt("Failed to read policy") { SlaPolicyStore.fromJson(Files.readString(p)) }
+    }
 
-        val policy = if (policyPath != null) {
-            val p = Paths.get(policyPath)
-            if (!Files.exists(p)) return Result(1, "", "Policy file not found: $policyPath\n")
-            SlaPolicyStore.fromJson(Files.readString(p))
-        } else {
-            SlaPolicy.DEFAULT
-        }
+    private fun execute(options: Options, now: Instant): Result {
+        val items = cliAttempt("Failed to read inventory") { readInventory(Paths.get(options.inventoryPath)) }
+        val policy = loadPolicy(options.policyPath)
 
         val policyErrors = policy.validate()
         if (policyErrors.isNotEmpty()) {
-            return Result(1, "", "Invalid policy:\n" + policyErrors.joinToString("\n") { "  - $it" } + "\n")
+            cliFail("Invalid policy:\n" + policyErrors.joinToString("\n") { "  - $it" } + "\n")
         }
 
         val eval = SlaEvaluator.evaluate(items, policy, now)
-        val body = if (output == "json") renderJson(eval) else SlaMarkdownReporter.render(eval, projectNameFromPath(inventoryPath))
-        val exit = if (failOnBreach && eval.summary.breachedCount > 0) 2 else 0
+        val body = if (options.output == "json") {
+            renderJson(eval)
+        } else {
+            SlaMarkdownReporter.render(eval, projectNameFromPath(options.inventoryPath))
+        }
+        val exit = if (options.failOnBreach && eval.summary.breachedCount > 0) 2 else 0
         return Result(exit, body, "")
     }
 

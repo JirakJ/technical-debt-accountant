@@ -23,15 +23,13 @@
 <ul>
   <li><b>Debt Inventory</b> — Catalog items with 9 categories, 4 priority levels, and estimated fix times</li>
   <li><b>Add Debt at Cursor</b> — Press Alt+D to log a debt item at the current file and line</li>
-  <li><b>Workaround Timer</b> — Track time spent on workarounds with start/stop timer or manual logging</li>
-  <li><b>Gutter Icons</b> — Priority-colored markers in the editor with debt tooltips</li>
+  <li><b>Workaround Logging</b> — Log minutes spent working around a debt item, with an optional note</li>
 </ul>
 
 <h3>Analysis and Detection</h3>
 <ul>
   <li><b>TODO/FIXME Scanner</b> — Imports TODO/FIXME/HACK/XXX/OPTIMIZE comments as debt items with marker-based category and priority; deduplicates on re-scan</li>
   <li><b>Hotspot Detection</b> — Identifies files with the highest debt concentration by weighted score</li>
-  <li><b>Git Integration</b> — Links debt items to commits and tracks file authors via blame</li>
   <li><b>Project Persistence</b> — Data stored in .tech-debt/inventory.json for Git tracking</li>
 </ul>
 
@@ -40,7 +38,7 @@
   <li><b>Dollar Valuation</b> — Converts workaround time to costs using configurable hourly rates</li>
   <li><b>Monthly Interest</b> — Tracks recurring workaround costs over 30-day windows</li>
   <li><b>ROI Calculator</b> — Calculates breakeven months and prioritizes by return on investment</li>
-  <li><b>Burndown Charts</b> — Tracks debt resolution trends over time</li>
+  <li><b>Trend Forecast</b> — Projects debt count, dollars and an estimated burndown date from weekly digest snapshots</li>
   <li><b>Management Reports</b> — Executive-ready Markdown reports with summaries and ROI opportunities</li>
   <li><b>CSV/JSON Export</b> — Share the backlog with management in Excel/Sheets, with computed dollar costs</li>
 </ul>
@@ -48,8 +46,6 @@
 <h3>Requirements</h3>
 <ul>
   <li>IntelliJ IDEA 2025.1+ (build 251+)</li>
-  <li>Git4Idea plugin (optional — for Git integration)</li>
-  <li>Java 17+</li>
 </ul>
 
 <h3>Support</h3>
@@ -79,7 +75,6 @@
     ]]></change-notes>
 
     <depends>com.intellij.modules.platform</depends>
-    <depends optional="true" config-file="git-features.xml">Git4Idea</depends>
 
     <extensions defaultExtensionNs="com.intellij">
         <toolWindow

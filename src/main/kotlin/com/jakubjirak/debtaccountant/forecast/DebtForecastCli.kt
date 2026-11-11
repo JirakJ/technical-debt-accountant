@@ -4,6 +4,13 @@ import com.google.gson.GsonBuilder
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
+import com.jakubjirak.debtaccountant.cli.CliAbort
+import com.jakubjirak.debtaccountant.cli.cliAttempt
+import com.jakubjirak.debtaccountant.cli.cliFail
+import com.jakubjirak.debtaccountant.cli.cliHelp
+import com.jakubjirak.debtaccountant.cli.cliValue
+import com.jakubjirak.debtaccountant.cli.cliWriteFile
+import com.jakubjirak.debtaccountant.cli.isHelpArg
 import kotlin.system.exitProcess
 
 /**
@@ -39,9 +46,24 @@ object DebtForecastCli {
     }
 
     /** Testable entry point: never calls [exitProcess]. */
-    fun run(args: Array<String>): Result {
+    fun run(args: Array<String>): Result = try {
+        execute(parseArgs(args))
+    } catch (abort: CliAbort) {
+        Result(abort.exitCode, abort.stdout, abort.stderr)
+    }
+
+    private data class Options(
+        val snapshotsDir: String,
+        val horizonWeeks: Int,
+        val model: ForecastModel,
+        val format: String,
+        val outPath: String,
+        val failOnDegrading: Boolean,
+    )
+
+    private fun parseArgs(args: Array<String>): Options {
         var snapshotsDir: String? = null
-        var horizonWeeks = 12
+        var horizonWeeks = DEFAULT_HORIZON_WEEKS
         var model = ForecastModel.AUTO
         var format = "md"
         var outPath: String? = null
@@ -49,68 +71,70 @@ object DebtForecastCli {
 
         for (raw in args) {
             when {
-                raw == "--help" || raw == "-h" -> return Result(0, HELP, "")
-                raw.startsWith("--snapshots-dir=") -> snapshotsDir = raw.substringAfter('=')
-                raw.startsWith("--horizon-weeks=") -> {
-                    horizonWeeks = raw.substringAfter('=').toIntOrNull()
-                        ?: return Result(1, "", "Invalid --horizon-weeks: ${raw.substringAfter('=')}\n")
-                    if (horizonWeeks <= 0) return Result(1, "", "--horizon-weeks must be > 0\n")
-                }
-                raw.startsWith("--model=") -> {
-                    model = when (raw.substringAfter('=').lowercase()) {
-                        "linear" -> ForecastModel.LINEAR
-                        "exponential" -> ForecastModel.EXPONENTIAL
-                        "auto" -> ForecastModel.AUTO
-                        else -> return Result(1, "", "Invalid --model: ${raw.substringAfter('=')}\n")
-                    }
-                }
-                raw.startsWith("--format=") -> {
-                    format = raw.substringAfter('=').lowercase()
-                    if (format !in FORMATS) return Result(1, "", "Invalid --format: $format\n")
-                }
-                raw.startsWith("--out=") -> outPath = raw.substringAfter('=')
+                isHelpArg(raw) -> cliHelp(HELP)
+                raw.startsWith("--snapshots-dir=") -> snapshotsDir = raw.cliValue()
+                raw.startsWith("--horizon-weeks=") -> horizonWeeks = parseHorizon(raw.cliValue())
+                raw.startsWith("--model=") -> model = parseModel(raw.cliValue())
+                raw.startsWith("--format=") -> format = parseFormat(raw.cliValue())
+                raw.startsWith("--out=") -> outPath = raw.cliValue()
                 raw == "--fail-on-degrading" -> failOnDegrading = true
-                else -> return Result(1, "", "Unknown argument: $raw\n$HELP")
+                else -> cliFail("Unknown argument: $raw\n$HELP")
             }
         }
 
-        if (snapshotsDir == null) return Result(1, "", "Missing --snapshots-dir\n$HELP")
-        if (outPath == null) return Result(1, "", "Missing --out\n$HELP")
+        return Options(
+            snapshotsDir = snapshotsDir ?: cliFail("Missing --snapshots-dir\n$HELP"),
+            horizonWeeks = horizonWeeks,
+            model = model,
+            format = format,
+            outPath = outPath ?: cliFail("Missing --out\n$HELP"),
+            failOnDegrading = failOnDegrading,
+        )
+    }
 
-        val dir: Path = Paths.get(snapshotsDir)
-        if (!Files.isDirectory(dir)) return Result(1, "", "Snapshot directory does not exist: $dir\n")
+    private fun parseHorizon(value: String): Int {
+        val weeks = value.toIntOrNull() ?: cliFail("Invalid --horizon-weeks: $value\n")
+        if (weeks <= 0) cliFail("--horizon-weeks must be > 0\n")
+        return weeks
+    }
 
-        val points = try {
-            SnapshotHistoryLoader(dir).load()
-        } catch (e: Exception) {
-            return Result(1, "", "Failed to load snapshots: ${e.message}\n")
-        }
+    private fun parseModel(value: String): ForecastModel = when (value.lowercase()) {
+        "linear" -> ForecastModel.LINEAR
+        "exponential" -> ForecastModel.EXPONENTIAL
+        "auto" -> ForecastModel.AUTO
+        else -> cliFail("Invalid --model: $value\n")
+    }
 
-        val forecast = DebtForecaster().forecast(points, horizonWeeks, model)
+    private fun parseFormat(value: String): String {
+        val format = value.lowercase()
+        if (format !in FORMATS) cliFail("Invalid --format: $format\n")
+        return format
+    }
 
-        val body = when (format) {
-            "md" -> ForecastMarkdownReporter.render(forecast)
+    private fun execute(options: Options): Result {
+        val dir: Path = Paths.get(options.snapshotsDir)
+        if (!Files.isDirectory(dir)) cliFail("Snapshot directory does not exist: $dir\n")
+
+        val points = cliAttempt("Failed to load snapshots") { SnapshotHistoryLoader(dir).load() }
+        val forecast = DebtForecaster().forecast(points, options.horizonWeeks, options.model)
+
+        val body = when (options.format) {
             "html" -> ForecastHtmlReporter.render(forecast)
             "json" -> GSON.toJson(forecast)
-            else -> return Result(1, "", "Invalid --format: $format\n")
+            else -> ForecastMarkdownReporter.render(forecast)
         }
+        cliWriteFile(options.outPath, body)
 
-        try {
-            val target = Paths.get(outPath)
-            target.parent?.let { Files.createDirectories(it) }
-            Files.writeString(target, body)
-        } catch (e: Exception) {
-            return Result(1, "", "Failed to write output: ${e.message}\n")
-        }
-
-        val stdout = "Forecast written to $outPath " +
+        val stdout = "Forecast written to ${options.outPath} " +
             "(samples=${forecast.sampleCount}, trend=${forecast.direction}, model=${forecast.selectedModel})\n"
-        return if (failOnDegrading && forecast.direction == TrendDirection.DEGRADING) {
+        return if (options.failOnDegrading && forecast.direction == TrendDirection.DEGRADING) {
             Result(1, stdout, "DEGRADING trend detected (--fail-on-degrading)\n")
         } else {
             Result(0, stdout, "")
         }
     }
+
+    private const val DEFAULT_HORIZON_WEEKS = 12
 
     private val GSON = GsonBuilder().setPrettyPrinting().serializeSpecialFloatingPointValues().create()
     private val FORMATS = setOf("md", "html", "json")

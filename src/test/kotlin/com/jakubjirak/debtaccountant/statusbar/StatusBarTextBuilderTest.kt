@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test
 
 class StatusBarTextBuilderTest {
 
+    @Suppress("LongParameterList") // test fixture builder: every parameter has a default
     private fun health(
         grade: DebtGrade = DebtGrade.B,
         score: Int = 80,

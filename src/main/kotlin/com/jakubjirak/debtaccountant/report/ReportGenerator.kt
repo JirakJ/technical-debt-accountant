@@ -11,10 +11,9 @@ import com.jakubjirak.debtaccountant.valuation.RoiCalculator
 import java.text.SimpleDateFormat
 import java.util.Date
 
-class ReportGenerator {
+class ReportGenerator(private val valuator: DollarValuator = DollarValuator()) {
 
-    private val valuator = DollarValuator()
-    private val roiCalculator = RoiCalculator()
+    private val roiCalculator = RoiCalculator(valuator)
     private val hotspotDetector = HotspotDetector()
 
     fun generateReport(projectName: String, items: List<TechDebtItem>, currency: String): DebtReport {

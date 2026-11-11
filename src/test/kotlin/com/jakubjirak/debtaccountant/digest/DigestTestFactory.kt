@@ -7,8 +7,11 @@ import com.jakubjirak.debtaccountant.model.WorkaroundLog
 
 internal object DigestTestFactory {
 
+    private val nextId = java.util.concurrent.atomic.AtomicInteger()
+
+    @Suppress("LongParameterList") // test fixture builder: every parameter has a default
     fun item(
-        id: String = "id-$${(Math.random() * 10_000).toInt()}",
+        id: String = "id-${nextId.incrementAndGet()}",
         filePath: String = "src/${id}.kt",
         priority: DebtPriority = DebtPriority.MEDIUM,
         category: DebtCategory = DebtCategory.CODE_SMELL,

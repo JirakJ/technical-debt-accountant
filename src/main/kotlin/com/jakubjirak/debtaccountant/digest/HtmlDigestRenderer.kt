@@ -78,7 +78,8 @@ object HtmlDigestRenderer {
             sb.append("<p><em>No active debt — nothing to spotlight.</em></p>")
             return
         }
-        sb.append("<table><thead><tr><th>File</th><th class=\"num\">Items</th><th class=\"num\">Cost</th><th>Top Priority</th></tr></thead><tbody>")
+        sb.append("<table><thead><tr><th>File</th><th class=\"num\">Items</th>")
+            .append("<th class=\"num\">Cost</th><th>Top Priority</th></tr></thead><tbody>")
         for (h in d.hotspots) {
             sb.append("<tr><td>").append(esc(h.filePath))
                 .append("</td><td class=\"num\">").append(h.itemCount)
@@ -95,7 +96,8 @@ object HtmlDigestRenderer {
             sb.append("<p><em>No ROI-ranked recommendations available.</em></p>")
             return
         }
-        sb.append("<table><thead><tr><th>ID</th><th>Description</th><th>Priority</th><th class=\"num\">Effort (h)</th><th class=\"num\">Monthly $</th><th class=\"num\">ROI</th></tr></thead><tbody>")
+        sb.append("<table><thead><tr><th>ID</th><th>Description</th><th>Priority</th>")
+            .append("<th class=\"num\">Effort (h)</th><th class=\"num\">Monthly $</th><th class=\"num\">ROI</th></tr></thead><tbody>")
         for (r in d.recommendations) {
             sb.append("<tr><td>").append(esc(r.itemId))
                 .append("</td><td>").append(esc(r.description))
