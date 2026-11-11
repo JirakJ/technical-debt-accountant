@@ -19,7 +19,10 @@ class MarkdownDigestRendererTest {
         listOf(
             item("a", priority = DebtPriority.HIGH, filePath = "src/Alpha.kt", estimatedFixMinutes = 120, workaroundMinutes = 60),
             item("b|bad", priority = DebtPriority.CRITICAL, filePath = "src/Beta.kt", estimatedFixMinutes = 60, workaroundMinutes = 30),
-            item("c", priority = DebtPriority.LOW, filePath = "src/Gamma.kt", estimatedFixMinutes = 30, resolved = true, resolvedAtMillis = now - 3600_000)
+            item(
+                "c", priority = DebtPriority.LOW, filePath = "src/Gamma.kt", estimatedFixMinutes = 30,
+                resolved = true, resolvedAtMillis = now - 3600_000
+            )
         ),
         previous,
         DigestPeriod.Last7,

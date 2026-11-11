@@ -6,6 +6,13 @@ import com.jakubjirak.debtaccountant.model.TechDebtItem
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
+import com.jakubjirak.debtaccountant.cli.CliAbort
+import com.jakubjirak.debtaccountant.cli.cliAttempt
+import com.jakubjirak.debtaccountant.cli.cliFail
+import com.jakubjirak.debtaccountant.cli.cliHelp
+import com.jakubjirak.debtaccountant.cli.cliValue
+import com.jakubjirak.debtaccountant.cli.cliWriteFile
+import com.jakubjirak.debtaccountant.cli.isHelpArg
 import kotlin.system.exitProcess
 
 /**
@@ -39,7 +46,21 @@ object DebtScanCli {
     }
 
     /** Testable entry point: parses args, runs the scan, returns a [Result]. */
-    fun run(args: Array<String>): Result {
+    fun run(args: Array<String>): Result = try {
+        execute(parseArgs(args))
+    } catch (abort: CliAbort) {
+        Result(abort.exitCode, abort.stdout, abort.stderr)
+    }
+
+    private data class Options(
+        val root: String,
+        val inventoryPath: String?,
+        val format: String,
+        val out: String?,
+        val failOver: Int?,
+    )
+
+    private fun parseArgs(args: Array<String>): Options {
         var root: String? = null
         var inventoryPath: String? = null
         var format = "md"
@@ -47,49 +68,35 @@ object DebtScanCli {
         var failOver: Int? = null
         for (raw in args) {
             when {
-                raw.startsWith("--root=") -> root = raw.substringAfter('=')
-                raw.startsWith("--inventory=") -> inventoryPath = raw.substringAfter('=')
-                raw.startsWith("--format=") -> format = raw.substringAfter('=')
-                raw.startsWith("--out=") -> out = raw.substringAfter('=')
-                raw.startsWith("--fail-over=") -> {
-                    failOver = raw.substringAfter('=').toIntOrNull()
-                        ?: return Result(1, "", "--fail-over must be an integer\n")
-                }
-                raw == "--help" || raw == "-h" -> return Result(0, HELP, "")
-                else -> return Result(1, "", "Unknown argument: $raw\n$HELP")
+                raw.startsWith("--root=") -> root = raw.cliValue()
+                raw.startsWith("--inventory=") -> inventoryPath = raw.cliValue()
+                raw.startsWith("--format=") -> format = raw.cliValue()
+                raw.startsWith("--out=") -> out = raw.cliValue()
+                raw.startsWith("--fail-over=") ->
+                    failOver = raw.cliValue().toIntOrNull() ?: cliFail("--fail-over must be an integer\n")
+                isHelpArg(raw) -> cliHelp(HELP)
+                else -> cliFail("Unknown argument: $raw\n$HELP")
             }
         }
-        if (root == null) return Result(1, "", "Missing required --root=<path>\n$HELP")
-        if (format != "md" && format != "json") {
-            return Result(1, "", "--format must be 'md' or 'json' (was '$format')\n")
-        }
-        val rootPath = Paths.get(root)
-        if (!Files.isDirectory(rootPath)) return Result(1, "", "Not a directory: $root\n")
+        if (root == null) cliFail("Missing required --root=<path>\n$HELP")
+        if (format != "md" && format != "json") cliFail("--format must be 'md' or 'json' (was '$format')\n")
+        return Options(root, inventoryPath, format, out, failOver)
+    }
 
-        val existing = if (inventoryPath != null) {
-            try {
-                readInventory(Paths.get(inventoryPath))
-            } catch (e: Exception) {
-                return Result(1, "", "Failed to read inventory: ${e.message}\n")
-            }
-        } else {
-            emptyList()
-        }
+    private fun execute(options: Options): Result {
+        val rootPath = Paths.get(options.root)
+        if (!Files.isDirectory(rootPath)) cliFail("Not a directory: ${options.root}\n")
+
+        val existing = options.inventoryPath
+            ?.let { path -> cliAttempt("Failed to read inventory") { readInventory(Paths.get(path)) } }
+            .orEmpty()
 
         val comments = DebtCommentScanner.dedupe(DebtCommentScanner.scanDirectory(rootPath), existing)
-        val body = if (format == "json") renderJson(comments) else renderMarkdown(comments, rootPath)
+        val body = if (options.format == "json") renderJson(comments) else renderMarkdown(comments, rootPath)
 
-        if (out != null) {
-            try {
-                val target = Paths.get(out)
-                target.parent?.let { Files.createDirectories(it) }
-                Files.writeString(target, body)
-            } catch (e: Exception) {
-                return Result(1, "", "Failed to write output: ${e.message}\n")
-            }
-        }
+        options.out?.let { cliWriteFile(it, body) }
 
-        val exit = if (failOver != null && comments.size > failOver) 2 else 0
+        val exit = if (options.failOver != null && comments.size > options.failOver) 2 else 0
         return Result(exit, body, "")
     }
 

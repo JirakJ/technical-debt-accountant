@@ -114,7 +114,11 @@ class SlaCliTest {
     fun `invalid policy exits 1`(@TempDir tmp: Path) {
         val inv = writeInventory(tmp, emptyList())
         val badPolicy = tmp.resolve("bad.json")
-        Files.writeString(badPolicy, """{"rules":[{"priority":"HIGH","maxAgeDays":0,"warnAtPercent":80}],"defaultRule":{"priority":"LOW","maxAgeDays":365,"warnAtPercent":90}}""")
+        Files.writeString(
+            badPolicy,
+            """{"rules":[{"priority":"HIGH","maxAgeDays":0,"warnAtPercent":80}],""" +
+                """"defaultRule":{"priority":"LOW","maxAgeDays":365,"warnAtPercent":90}}"""
+        )
         val r = SlaCli.run(arrayOf("--inventory=$inv", "--policy=$badPolicy"), now)
         assertEquals(1, r.exitCode)
         assertTrue(r.stderr.contains("Invalid policy"))
@@ -126,7 +130,8 @@ class SlaCliTest {
         val strictPolicy = tmp.resolve("strict.json")
         Files.writeString(
             strictPolicy,
-            """{"rules":[{"priority":"HIGH","maxAgeDays":10,"warnAtPercent":80,"escalateOnBreach":false,"escalatedPriority":null}],"defaultRule":{"priority":"LOW","maxAgeDays":10,"warnAtPercent":80,"escalateOnBreach":false,"escalatedPriority":null}}"""
+            """{"rules":[{"priority":"HIGH","maxAgeDays":10,"warnAtPercent":80,"escalateOnBreach":false,"escalatedPriority":null}],""" +
+                """"defaultRule":{"priority":"LOW","maxAgeDays":10,"warnAtPercent":80,"escalateOnBreach":false,"escalatedPriority":null}}"""
         )
         val r = SlaCli.run(arrayOf("--inventory=$inv", "--policy=$strictPolicy", "--fail-on-breach"), now)
         assertEquals(2, r.exitCode)

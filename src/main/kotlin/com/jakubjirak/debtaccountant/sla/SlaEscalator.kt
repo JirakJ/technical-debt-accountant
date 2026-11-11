@@ -23,8 +23,8 @@ class SlaEscalator(private val project: Project) {
     fun apply(escalations: List<EscalationAction>, store: DebtInventoryStore): Int {
         var applied = 0
         for (action in escalations) {
-            val current = store.getItemById(action.item.id) ?: continue
-            if (current.priority == action.to) continue
+            val current = store.getItemById(action.item.id)
+            if (current == null || current.priority == action.to) continue
             val updated = current.copy(
                 priority = action.to,
                 updatedAt = System.currentTimeMillis(),

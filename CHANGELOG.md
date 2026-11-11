@@ -1,5 +1,16 @@
 # Changelog
 
+## [Unreleased]
+
+### Fixed
+- Settings page no longer shows options that had no effect (Inventory Path, Auto-detect debt items, Show gutter icons); the inventory always lives in `.tech-debt/inventory.json`.
+- Invalid hourly rate / budget input in Settings falls back to safe defaults instead of being stored as-is.
+- **Log Workaround Time** rejects zero, negative or non-numeric minutes instead of silently logging 15 minutes.
+- CLI (`SlaCli`) reports an unreadable policy file as an error instead of crashing.
+
+### Removed
+- Unused Git integration service and the optional Git4Idea dependency, an unregistered gutter-icon renderer, an unused burndown calculator and the never-wired workaround timer API. Documentation no longer advertises these.
+
 ## [2026.8.0] - 2026-11-10
 
 ### Changed

@@ -36,21 +36,15 @@
 - **Add debt at cursor** — press **Alt+D** to log a debt item at the current file and line
 - **9 debt categories** — Code Smell, Missing Tests, Outdated Dependency, Security Vulnerability, Performance Issue, Documentation Gap, Architecture Violation, Hardcoded Value, Copy-Paste Code
 - **4 priority levels** — Critical (4×), High (3×), Medium (2×), Low (1×) with weight multipliers
-- **Workaround timer** — start/stop timer or manually log workaround minutes with notes
+- **Workaround logging** — log minutes spent working around a debt item, with an optional note
 - **Hotspot detection** — identifies files with the most debt by weighted score
-- **Git integration** — links debt items to commits and tracks file authors
-- **Gutter icons** — priority-colored markers in the editor with debt tooltips
 - **Tech Debt tool window** — table view with active count, category, priority, and workaround minutes
 - **Project-level persistence** — data stored in `.tech-debt/inventory.json` (Git-trackable)
 - **Dollar valuation** — converts workaround time to cost using configurable hourly rate
 - **Monthly interest calculation** — tracks recurring workaround costs over 30-day windows
 - **ROI calculator** — calculates breakeven months (fix cost ÷ monthly interest) and prioritizes by ROI
-- **Burndown chart** — tracks debt resolution trends (IMPROVING / STABLE / WORSENING)
+- **Trend forecast** — projects debt count, dollars and an estimated burndown date from weekly digest snapshots
 - **Management export** — generates Markdown reports with executive summary, hotspots, and ROI opportunities
-- **CSV export** — export burndown data for external analysis
-- **Team aggregation** — aggregate debt metrics across team members and projects
-- **JIRA integration** — link debt items to JIRA tickets
-- **Trend analytics** — long-term debt trend analysis across the organization
 
 ## 🧮 Sprint Planning Recommender
 
@@ -262,8 +256,9 @@ Open **Settings** → **Tools** → **Technical Debt Accountant** to configure:
 |---------|---------|-------------|
 | Hourly Rate | `80.0` | Developer hourly rate for dollar valuation |
 | Currency | `USD` | Currency for cost display (USD, EUR, GBP, CZK) |
-| Inventory Path | `.tech-debt` | Directory for debt inventory storage (relative to project root) |
-| Show Gutter Icons | `true` | Display priority-colored icons in the editor gutter |
+| Monthly Debt Budget | `0` | Status bar flags the project as over budget when monthly interest exceeds this (`0` = no budget) |
+
+The inventory is always stored in `.tech-debt/inventory.json` under the project root.
 
 ## 🎯 Usage
 
@@ -286,8 +281,6 @@ Use **Tools** → **Log Workaround Time** to record time spent working around de
 - Select an active debt item from the list
 - Enter the number of minutes spent
 - Optionally add a note describing the workaround
-
-Alternatively, use the timer mode: `WorkaroundTracker.startTimer()` → `stopTimer()` to track time automatically.
 
 ### Generating Reports
 
@@ -331,8 +324,6 @@ Each debt item's cost is calculated from tracked workaround time:
 ## 📋 Requirements
 
 - IntelliJ IDEA 2025.1+ (build 251+)
-- Git4Idea plugin (optional — for Git integration features)
-- Java 17+
 
 ## 🏗️ Building from Source
 

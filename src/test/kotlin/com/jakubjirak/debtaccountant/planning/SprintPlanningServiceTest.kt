@@ -12,6 +12,7 @@ class SprintPlanningServiceTest {
 
     private val service = SprintPlanningService()
 
+    @Suppress("LongParameterList") // test fixture builder: every parameter has a default
     private fun item(
         id: String,
         priority: DebtPriority = DebtPriority.MEDIUM,
@@ -34,6 +35,7 @@ class SprintPlanningServiceTest {
         updatedAt = createdAt
     )
 
+    @Suppress("LongParameterList") // test fixture builder: every parameter has a default
     private fun opts(
         budgetHours: Double,
         include: Set<String> = emptySet(),
