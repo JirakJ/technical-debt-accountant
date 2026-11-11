@@ -1,7 +1,7 @@
 # Technical Debt Accountant
 
 [![Build](https://github.com/JirakJ/technical-debt-accountant/actions/workflows/build.yml/badge.svg)](https://github.com/JirakJ/technical-debt-accountant/actions/workflows/build.yml)
-[![Version](https://img.shields.io/badge/version-2026.8.0-blue.svg)](https://github.com/JirakJ/technical-debt-accountant/releases)
+[![Version](https://img.shields.io/badge/version-2026.9.0-blue.svg)](https://github.com/JirakJ/technical-debt-accountant/releases)
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue)](LICENSE)
 
 > **Free & open source** — every feature is unlocked for everyone, no license needed. Licensed under [Apache-2.0](LICENSE).
