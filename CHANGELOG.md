@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [2026.9.0] - 2026-11-11
+
 ### Fixed
 - Settings page no longer shows options that had no effect (Inventory Path, Auto-detect debt items, Show gutter icons); the inventory always lives in `.tech-debt/inventory.json`.
 - Invalid hourly rate / budget input in Settings falls back to safe defaults instead of being stored as-is.
